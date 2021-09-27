@@ -1,0 +1,18 @@
+@startuml
+class Tournoi {
+tournament_name
+tournament_place
+tournament date
+number_of_turns [default=4]
+rounds [list of rounds]
+players [list of index players]
+tournament_time [bullet, blitz or rapid]
+organiser_description
+}
+
+class Round {
+name
+round_players [list of couple]
+}
+
+@enduml
