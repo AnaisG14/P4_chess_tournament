@@ -1,5 +1,6 @@
 @startuml
-class Tournoi {
+Rectangle Models{
+class Tournament {
 tournament_name
 tournament_place
 tournament date
@@ -15,26 +16,32 @@ name
 round_players [list of couple]
 datetime_start
 datetime_end
+matches [list]
 
 generation_of_couple()
 }
 
 class Player {
+index_auto
 first_name
 last_name
 date_of_birthday
 sexe
 ranking [positive number]
+
+add_tournament(name_tournament)
+modify_ranking()
 }
+
+
 
 class PlayerInRound(player) {
 piece_color [Black or White]
-result
+result_per_match
+score_tournament
 tournanent
-}
 
-class Round {
-mathes [list]
+modify_score_tournament()
 }
 
 class Match {
@@ -50,5 +57,15 @@ score_order()
 list_of_tournaments()
 list_of_rounds(tournament)
 list_of_matches(tournament)
+}
+}
+
+Rectangle Vue {
+Class TournamentView {
+display_information_tournament(objet Tournament)
+}
+
+Class PlayerView {
+display_information_player(objet Player)
 }
 @enduml
