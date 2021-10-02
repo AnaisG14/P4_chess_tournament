@@ -4,7 +4,7 @@ tournament_name
 tournament_place
 tournament date
 number_of_turns [default=4]
-rounds [list of rounds]
+rounds [list of round_instance]
 players [list of index players]
 tournament_time [bullet, blitz or rapid]
 organiser_description
@@ -13,6 +13,42 @@ organiser_description
 class Round {
 name
 round_players [list of couple]
+datetime_start
+datetime_end
+
+generation_of_couple()
 }
 
+class Player {
+first_name
+last_name
+date_of_birthday
+sexe
+ranking [positive number]
+}
+
+class PlayerInRound(player) {
+piece_color [Black or White]
+result
+tournanent
+}
+
+class Round {
+mathes [list]
+}
+
+class Match {
+result [tuple of list (player,score)]
+}
+
+class Rapport {
+players [list name, tournoi, classement]
+tournaments [list de tous les tournois]
+
+alphabetical_order()
+score_order()
+list_of_tournaments()
+list_of_rounds(tournament)
+list_of_matches(tournament)
+}
 @enduml
