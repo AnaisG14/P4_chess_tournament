@@ -1,27 +1,27 @@
 @startuml
 Rectangle Models{
-class Tournament {
+class TournamentModel {
 tournament_name
 tournament_place
-tournament date
-number_of_turns [default=4]
-rounds [list of round_instance]
+tournament date [tuple de date(debut, fin)]
+rounds_number [default=4]
+rounds_list [list of round_instance]
 players [list of index players]
-tournament_time [bullet, blitz or rapid]
-organiser_description
+time_controller [bullet, blitz or rapid]
+manager_description
 }
 
-class Round {
-name
+class RoundModel {
+round_name
 round_players [list of couple]
-datetime_start
-datetime_end
+datetime_start [autocomplétion à la création du round]
+datetime_end [autocomplétion à la fin du round]
 matches [list]
 
 generation_of_couple()
 }
 
-class Player {
+class PlayerModel {
 index_auto
 first_name
 last_name
@@ -33,9 +33,7 @@ add_tournament(name_tournament)
 modify_ranking()
 }
 
-
-
-class PlayerInRound(player) {
+class PlayerInRoundModel(player) {
 piece_color [Black or White]
 result_per_match
 score_tournament
@@ -44,19 +42,24 @@ tournanent
 modify_score_tournament()
 }
 
-class Match {
-result [tuple of list (player,score)]
+class MatchModel {
+match [tuple of list :player,score]
+add_score() [V=1, D=0, N=1/2]
 }
 
-class Rapport {
-players [list name, tournoi, classement]
-tournaments [list de tous les tournois]
+class ClassementModel {
+order_player()
+}
+
+class RapportModel {
+players [list de tous les joueurs]
+players_tournament [list de tous les joueurs d'un tournoi]
+all_tournaments [list de tous les tournois]
+round_tournament [list de tous les rounds d'un tournoi]
+matches_tournament [list de tous les matches d'un tournoi]
 
 alphabetical_order()
 score_order()
-list_of_tournaments()
-list_of_rounds(tournament)
-list_of_matches(tournament)
 }
 }
 
@@ -67,5 +70,33 @@ display_information_tournament(objet Tournament)
 
 Class PlayerView {
 display_information_player(objet Player)
+}
+
+class CreateTournamentView {
+information_tournament [dict]
+ask_information()
+add_information()
+}
+
+class ClassementView {
+display_classement() [en lien avec ClassementModel]
+}
+}
+
+Rectangle Controllers {
+class CreateTournament {
+None
+verify_view() [CreateTournamentView]
+add_information_model() [TournmentModel]
+}
+
+class CreateRound {
+player_list [lien avec Tournament et Player]
+generate_matches()
+modify_RoundModel()
+}
+
+class DisplayClassement {
+}
 }
 @enduml

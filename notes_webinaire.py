@@ -90,7 +90,7 @@ class HomeMenuView:
 class MenuEntry:
     def __init__(self, option, handler):
         self.option = option
-        self.handler = controller
+        self.handler = handler
 
     def __repr__(self):
         return str(self.option)
@@ -106,12 +106,12 @@ class Menu:
             self._autokey +=1
         self.entries[str(key)] = MenuEntry(option, handler)
 
-        def __contains__(self):
-            return str(choice) in self.entries
+    def __contains__(self):
+        return str(choice) in self.entries
 
-        def __getitem__(self, choice):
-            pass
+    def __getitem__(self, choice):
+        pass
 
 if __name__ == "__main__":
     app = ApplicationController()
-    app.stat()
+    app.start()
