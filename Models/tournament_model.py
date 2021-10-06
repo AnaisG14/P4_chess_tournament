@@ -7,7 +7,6 @@ class TournamentModel:
             setattr(self, attr_name, attr_value)
         self.rounds_list = []
         self.players_index = []
-        self.tournament_date = ("date_debut", "date_fin")
 
     def __str__(self):
         return str(self.informations_tournament)
