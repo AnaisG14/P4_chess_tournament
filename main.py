@@ -1,4 +1,4 @@
-from Controllers import home_menu_controller
+from controllers import home_menu_controller
 
 class ApplicationController:
     """ Launch the software"""

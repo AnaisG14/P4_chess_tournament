@@ -1,6 +1,6 @@
-from Models import tournament_model
-from Views import tournament_view, home_menu_view
-from Controllers import home_menu_controller
+from models import tournament_model
+from views import tournament_view, home_menu_view
+from controllers import home_menu_controller
 import datetime
 
 class CreateTournament:
@@ -36,7 +36,7 @@ class CreateTournament:
                                                    "end_date"
                                                    "date")
 
-        # ask question to user
+        # ask question to manager
         for question in self.informations_tournament.questions:
             self.verification = False
             while self.verification == False:
