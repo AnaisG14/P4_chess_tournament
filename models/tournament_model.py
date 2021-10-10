@@ -1,11 +1,11 @@
 class TournamentModel:
     """ Model of tournament"""
 
-    def __init__(self, informations_tournament):
+    def __init__(self, informations_tournament: dict):
         self.informations_tournament = informations_tournament
         for attr_name, attr_value in informations_tournament.items():
             setattr(self, attr_name, attr_value)
-        #self.tournament_date = (self.start_date, self.end_date)
+        self.tournament_date = (informations_tournament["start_date"], informations_tournament["end_date"])
         self.rounds_name = []
         nb = 1
         rounds_number = self.rounds_number
@@ -17,18 +17,22 @@ class TournamentModel:
         self.players = []
 
     def __str__(self):
-        aff = []
-        aff.append(self.informations_tournament)
-        aff.append(self.rounds)
-        aff.append(self.players)
-        return str(f"{aff[0]}, rounds : {aff[1]}, players : {aff[2]}")
+        display_tournament = f"{self.informations_tournament}\n Rounds\n"
+        for round in self.rounds:
+            display_tournament += f"{round}; "
+        display_tournament += "Joueurs\n"
+        for player in self.players:
+            display_tournament += f"{player}; "
+        return display_tournament
 
     def __repr__(self):
-        aff = []
-        aff.append(self.informations_tournament)
-        aff.append(self.rounds)
-        aff.append(self.players)
-        return str(f"{aff[0]}, rounds : {aff[1]}, players : {aff[2]}")
+        display_tournament = f"{self.informations_tournament}\n Rounds\n"
+        for round in self.rounds:
+            display_tournament += f"{round}; "
+        display_tournament += "Joueurs\n"
+        for player in self.players:
+            display_tournament += f"{player}; "
+        return display_tournament
 
     def add_players(self, player):
         self.players.append(player)
