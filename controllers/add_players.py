@@ -1,8 +1,7 @@
-from models import player_model, round_model, players_list
+from models import player, round, players_list
 from views import player_view
 from controllers import launch_tournament
 import datetime
-import copy
 
 class AddPlayers:
     """ Add players in a tournament"""
@@ -12,7 +11,7 @@ class AddPlayers:
         self.verification = False
         self.player_index = 1
         self.player_list = players_list.PlayersList()
-        self.player_in_round = round_model.RoundModel("round1")
+        self.player_in_round = round.Round("round1")
         self.launch_tournament = launch_tournament.LaunchTournament("tournoi1")
 
     def __call__(self):
@@ -33,7 +32,7 @@ class AddPlayers:
                 while self.verification == False:
                     response = self.player_informations.ask_questions(question[0])
                     self.verify_response(question, response)
-            player = player_model.PlayerModel(self.player_informations.informations_player)
+            player = player.Player(self.player_informations.informations_player)
             self.player_list.add_player(player)
             self.player_in_round.add_players((player.name, player.ranking))
             nb -= 1

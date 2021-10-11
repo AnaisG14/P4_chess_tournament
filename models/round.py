@@ -1,7 +1,7 @@
 from datetime import datetime
-from models import match_model
+from models import match
 
-class RoundModel:
+class Round:
     """ Model for a round"""
 
     def __init__(self,tournament_name, round_name, players):
@@ -17,30 +17,30 @@ class RoundModel:
     def add_players(self, player):
         self.round_players.append(player)
 
-    def add_match(self, match_model):
-        self.matches.append(match_model)
+    def add_match(self, match):
+        self.matches.append(match)
 
     def generate_first_pairs(self):
         # classer les joueurs en fonction de leur rang
+        global match
         self.round_players.sort(key=lambda x: x[0][1])
         number_of_pairs = len(self.round_players)/2
         nb = 0
         while nb < number_of_pairs:
             player1 = self.round_players[nb]
             player2 = self.round_players[int(nb + number_of_pairs)]
-            match = match_model.MatchModel(player1, player2)
-            self.add_match(match)
+            self.add_match(match.Match(player1, player2))
             nb += 1
 
     def generate_pairs(self):
         # classer les joueurs en fonction de leur score puis de leur rang
+        global match
         self.round_players.sort(key=lambda x: (x[1], x[0][1]))
         nb = 0
         while nb < len(self.round_players):
             player1 = self.round_players[nb]
             player2 = self.round_players[nb+1]
-            match = match_model.MatchModel(player1, player2)
-            self.add_match(match)
+            self.add_match(match.Match(player1, player2))
             nb += 2
 
     def add_end_time(self):

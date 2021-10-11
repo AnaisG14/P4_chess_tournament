@@ -1,6 +1,6 @@
-from Models import tournament_model
-from Views import tournament_view
-from Controllers import create_tournament
+from models import tournament
+from views import tournament_view
+from controllers import create_tournament
 """
 information_tournament = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
@@ -12,7 +12,7 @@ information_tournament = {"tournament_name": "Tournois test",
                           "tournament_date": ("04/10/2021", "05/10/2021")
                           }
 
-tournois = tournament_model.TournamentModel(information_tournament)
+tournois = tournament.Tournament(information_tournament)
 print(tournois.tournament_name)
 print(tournois.players_index[2])
 print(tournois)
@@ -23,7 +23,7 @@ info_tournois.add_questions("quel est votre nom", "nom")
 info_tournois.add_questions("quel est votre age", "age")
 info_tournois.ask_questions()
 print(info_tournois)
-tournois2 = tournament_model.TournamentModel(info_tournois.informations_tournament)
+tournois2 = tournament.Tournament(info_tournois.informations_tournament)
 print(tournois2)
 """
 

@@ -1,4 +1,4 @@
-from models import home_menu_model
+from models import home_menu
 from views import home_menu_view
 from controllers import create_tournament, add_players, view_reports, launch_tournament
 
@@ -6,7 +6,7 @@ from controllers import create_tournament, add_players, view_reports, launch_tou
 class HomeMenuController:
     """ Display HomeMenu and ask a choice to the user"""
     def __init__(self):
-        self.home_menu = home_menu_model.HomeMenuModel()
+        self.home_menu = home_menu.HomeMenu()
         self.menu_view = home_menu_view.HomeMenuView(self.home_menu)
 
     def __call__(self):

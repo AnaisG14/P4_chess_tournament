@@ -1,4 +1,4 @@
-from models import tournament_model
+from models import tournament
 from views import tournament_view, home_menu_view
 from controllers import home_menu_controller
 import datetime
@@ -7,7 +7,7 @@ class CreateTournament:
     """ Create tournament with user informations"""
     def __init__(self):
         self.informations_tournament = tournament_view.TournamentView()
-        self.tournament = tournament_model.TournamentModel(self.informations_tournament.informations_tournament)
+        self.tournament = tournament.Tournament(self.informations_tournament.informations_tournament)
         self.home_menu = home_menu_controller.HomeMenuController()
 
     def __call__(self):

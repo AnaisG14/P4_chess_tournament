@@ -1,4 +1,4 @@
-from models import round_model
+from models import round
 
 class LaunchTournament:
     """ Générer les paires de joueurs"""

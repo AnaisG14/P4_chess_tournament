@@ -1,14 +1,18 @@
-class RapportModel:
+class Report:
     """ affichage des éléments des tournois"""
 
-    def __init__(self, tournament_list):
+    def __init__(self):
         """ tournament list is an insctance of TournamentList"""
-        self.all_tournaments = tournament_list.tournaments
+        self.all_tournaments = []
         self.actors = []
         self.tournament_players = []
         self.all_tournaments_name = []
         self.rounds_per_tournament = []
         self.matches_tournament = []
+
+    def add_tournament(self, tournament):
+        self.all_tournaments.append(tournament)
+
 
     def list_actors(self, sort_methode="score"):
         """ display all the actors of all tournament

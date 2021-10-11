@@ -1,4 +1,4 @@
-class MatchModel:
+class Match:
     """ Instance of match"""
 
     def __init__(self, player1, player2):

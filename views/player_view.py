@@ -1,5 +1,5 @@
 class PlayerView:
-    """ View to ask player information and send to PlayerModel"""
+    """ View to ask player information and send to Player"""
     def __init__(self):
         self.informations_player = {}
         self.questions = []

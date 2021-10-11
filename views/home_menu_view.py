@@ -1,7 +1,7 @@
 
 class HomeMenuView:
     def __init__(self, menu_model):
-        # menu est d du type HomeMenuModel
+        # menu est d du type HomeMenu
         self.menu_view = menu_model
         self.keys = []
         self.choice = True

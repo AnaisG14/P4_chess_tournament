@@ -1,4 +1,4 @@
-class HomeMenuModel():
+class HomeMenu():
     """ Model for the home menu """
 
     def __init__(self):

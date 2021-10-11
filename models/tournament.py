@@ -1,4 +1,4 @@
-class TournamentModel:
+class Tournament:
     """ Model of tournament"""
 
     def __init__(self, informations_tournament: dict):
@@ -15,6 +15,13 @@ class TournamentModel:
             rounds_number -= 1
         self.rounds = []
         self.players = []
+        self.results = []
+
+    def display_results(self):
+        for player in self.players:
+            self.results.append((player.last_name, player.score))
+        self.results.sort(key=lambda x: x[1], reverse=True)
+        return self.results
 
     def __str__(self):
         display_tournament = f"{self.informations_tournament}\n Rounds\n"

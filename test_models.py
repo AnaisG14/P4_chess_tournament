@@ -1,7 +1,7 @@
-from models import tournament_model, tournament_list, player_model, players_list,\
-    round_model, match_model, classement_model, rapport_model
+from models import tournament, player,\
+    round, match, report
 
-# test tournament_model
+# test tournament
 information_tournament1 = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
                           "rounds_number": 4,
@@ -19,23 +19,15 @@ information_tournament2 = {"tournament_name": "Autre tournois test",
                            "end_date": "05/11/2021"
                           }
 print("creation de 2 tournois et d'une liste de tournoi")
-tournois1 = tournament_model.TournamentModel(information_tournament1)
-tournois2 = tournament_model.TournamentModel(information_tournament2)
-liste_tournois = tournament_list.TournamentList()
+tournois1 = tournament.Tournament(information_tournament1)
+tournois2 = tournament.Tournament(information_tournament2)
 print("affichage du nom premier tournoi")
 print(tournois1.tournament_name)
 print("affichage du 2nd tournoi")
 print(tournois2)
 print("ajout des tournoi à la liste créée")
-liste_tournois.add_tournament(tournois1)
-liste_tournois.add_tournament(tournois2)
-print("affichage du nom des tournois de la liste")
-for tournoi in liste_tournois.tournaments:
-    print(tournoi.tournament_name)
-print("affichage de tous les tournois de la liste")
-print(liste_tournois)
 
-# test player_model et list_player
+# test player et list_player
 dict_joueur1 = {"index" : 1,
                 "first_name" : "Anais",
                 "last_name" : "Gatard",
@@ -93,14 +85,14 @@ dict_joueur8 = {"index" : 8,
                 "sexe" : "M",
                 "ranking" : 29
                 }
-Anais = player_model.PlayerModel(dict_joueur1)
-Fred = player_model.PlayerModel(dict_joueur2)
-Guillaume = player_model.PlayerModel(dict_joueur3)
-Jean = player_model.PlayerModel(dict_joueur4)
-Paul = player_model.PlayerModel(dict_joueur5)
-Christelle = player_model.PlayerModel(dict_joueur6)
-Laure = player_model.PlayerModel(dict_joueur7)
-Jeremi = player_model.PlayerModel(dict_joueur8)
+Anais = player.Player(dict_joueur1)
+Fred = player.Player(dict_joueur2)
+Guillaume = player.Player(dict_joueur3)
+Jean = player.Player(dict_joueur4)
+Paul = player.Player(dict_joueur5)
+Christelle = player.Player(dict_joueur6)
+Laure = player.Player(dict_joueur7)
+Jeremi = player.Player(dict_joueur8)
 print("affichage des joueurs")
 print(Anais)
 print(Fred)
@@ -119,13 +111,16 @@ tournois1.add_players(Jeremi)
 
 print("ajout des joueurs au tournoi2")
 tournois2.add_players(Anais)
+
+print("joueur du tournoi 1")
 for player in tournois1.players:
     print(player)
+print("joueur du tournoi 2")
 for player in tournois2.players:
     print(player)
 
 print("créer un round")
-round1 = round_model.RoundModel(tournois1.tournament_name, "round1", tournois1.players)
+round1 = round.Round(tournois1.tournament_name, "round1", tournois1.players)
 tournois1.add_rounds(round1)
 for player in round1.round_players:
     print(player)
@@ -148,7 +143,7 @@ Jeremi.modifiy_score(Jeremi.score + 1)
 round1.add_end_time()
 print(f"round1 terminé à {round1.datetime_end}")
 print("nouveau round")
-round2 = round_model.RoundModel(tournois1.tournament_name,"Round2", tournois1.players)
+round2 = round.Round(tournois1.tournament_name,"Round2", tournois1.players)
 tournois1.add_rounds(round2)
 print("relance des matches")
 round2.generate_pairs()
@@ -157,12 +152,13 @@ print(round2.matches)
 print("tournois1")
 print(tournois1)
 print("classement")
-classement = classement_model.ClassementModel(tournois1)
-classement.display_results()
-print(classement)
+results = tournois1.display_results()
+print(results)
 
 # test rapports
-rapport1 = rapport_model.RapportModel(liste_tournois)
+rapport1 = report.Report()
+rapport1.add_tournament(tournois1)
+rapport1.add_tournament(tournois2)
 rapport1.list_actors("name")
 print(f"Affichage par nom:\n{rapport1.actors}")
 rapport1.list_actors("score")

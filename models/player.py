@@ -1,4 +1,4 @@
-class PlayerModel:
+class Player:
     """ Creation of player """
 
     def __init__(self, dict_player, score=0):
