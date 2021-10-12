@@ -2,9 +2,7 @@ class TournamentView:
     """ User interface using tournament model """
 
     def __init__(self):
-        self.informations_tournament = {}
         self.questions = []
-        self.responses = []
         self.verification = False
 
     def add_questions(self, question, question_variable, verify_question="", default_value=""):
@@ -16,9 +14,6 @@ class TournamentView:
     def ask_questions(self, question):
         return input(question)
 
-    def display_tournament(self):
-        for key, value in self.informations_tournament.items():
-            print(f"{key}: {value}")
+    def display_responses(self, description_tournament):
+        print(f"Vous venez de créer le tournoi suivant: \n{description_tournament}")
 
-    def __str__(self):
-        return str(self.informations_tournament)

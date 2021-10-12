@@ -1,3 +1,4 @@
+import sys
 from controllers import home_menu_controller
 
 class ApplicationController:
@@ -10,8 +11,13 @@ class ApplicationController:
         while self.controller:
             self.controller = self.controller()
 
-app = ApplicationController()
-app.run()
+def main():
+    app = ApplicationController()
+    app.run()
+
+if __name__ == '__main__':
+    sys.exit(main())
+
 # créer un tournoi
 
 # Ajouter 8 joueurs
