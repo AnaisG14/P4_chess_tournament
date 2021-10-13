@@ -9,7 +9,7 @@ class AddPlayers:
     def __init__(self, tournament):
         self.tournament = tournament
         self.view_get_information_player = player_view.PlayerView()
-        self.new_player = player.Player(self.view_get_information_player.responses)
+        self.informations_player = {}
         self.verification = False
         self.player_index = 1
 
@@ -33,9 +33,11 @@ class AddPlayers:
                     test_response = verify_response.verify_response(question, response)
                     if test_response == True:
                         self.verification = True
-                        self.tournament.players.append(self.new_player)
+                        self.informations_player[question[1]] = response
                     else:
                         print(test_response)
+            new_player = player.Player(self.informations_player)
+            self.tournament.add_players(new_player)
             nb -= 1
             self.view_get_information_player.display_informations_player()
         self.view_get_information_player.display_informations("Tous les joueurs ont été ajoutés."

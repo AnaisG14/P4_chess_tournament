@@ -6,11 +6,11 @@ def verify_response(question, response):
         condition = question[2]
         if condition == int:
             try:
-                response = int(response)
-                if type(response) == condition:
-                    return True
+                int(response)
             except ValueError:
                 return f"vous devez indiquer un nombre"
+            else:
+                return True
         elif type(condition) == list:
             if response in condition:
                 return True
@@ -19,8 +19,7 @@ def verify_response(question, response):
         elif condition == "date":
             date = response.split("-")
             try:
-                datetime.date(int(date[2]), int(date[1]), int(date[1]))
-                return True
+                date_test = datetime.date(int(date[2]), int(date[1]), int(date[1]))
             except ValueError:
                 return "vérifier que le nombre de mois est entre 1 et 12 et que le nombre de jours " \
                        "est entre 1 et 31"
@@ -28,6 +27,11 @@ def verify_response(question, response):
                 return "les éléments de la date doivent etre des chiffres séparés par un tiret"
             except IndexError:
                 return "Vous devez indiquez un jour(jj), un mois(mm) et une année(aaaa)"
+            else:
+                if datetime.date(1900,1,1) < date_test:
+                    return True
+                else:
+                    return f"L'année doit être composée de 4 chiffres"
         elif condition == "required":
             if response:
                 return True

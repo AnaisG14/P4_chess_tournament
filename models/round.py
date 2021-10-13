@@ -4,11 +4,11 @@ from models import match
 class Round:
     """ Model for a round"""
 
-    def __init__(self,tournament_name, round_name, players):
+    def __init__(self,tournament, round):
         """ player is an attibut of tournament model"""
-        self.round_name = f"{round_name} de {tournament_name}"
+        self.round_name = round
         self.round_players = []
-        for player in players:
+        for player in tournament.players:
             self.round_players.append([(player.last_name, player.ranking), player.score])
         self.matches = []
         self.datetime_start = datetime.now()
