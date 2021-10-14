@@ -1,4 +1,5 @@
 from datetime import datetime
+from operator import attrgetter
 from models import match
 
 class Round:
@@ -6,16 +7,12 @@ class Round:
 
     def __init__(self,tournament, round):
         """ player is an attibut of tournament model"""
+        self.tournament = tournament
         self.round_name = round
-        self.round_players = []
-        for player in tournament.players:
-            self.round_players.append([(player.last_name, player.ranking), player.score])
+        self.round_players = tournament.players
         self.matches = []
         self.datetime_start = datetime.now()
         self.datetime_end = ""
-
-    def add_players(self, player):
-        self.round_players.append(player)
 
     def add_match(self, match):
         self.matches.append(match)
@@ -23,23 +20,23 @@ class Round:
     def generate_first_pairs(self):
         # classer les joueurs en fonction de leur rang
         global match
-        self.round_players.sort(key=lambda x: x[0][1])
+        list_players_sorted = sorted(self.round_players, key=attrgetter("ranking"))
         number_of_pairs = len(self.round_players)/2
         nb = 0
         while nb < number_of_pairs:
-            player1 = self.round_players[nb]
-            player2 = self.round_players[int(nb + number_of_pairs)]
+            player1 = list_players_sorted[nb]
+            player2 = list_players_sorted[int(nb + number_of_pairs)]
             self.add_match(match.Match(player1, player2))
             nb += 1
 
     def generate_pairs(self):
         # classer les joueurs en fonction de leur score puis de leur rang
         global match
-        self.round_players.sort(key=lambda x: (x[1], x[0][1]))
+        list_players_sorted = sorted(self.round_players, key=attrgetter("score", "ranking"))
         nb = 0
         while nb < len(self.round_players):
-            player1 = self.round_players[nb]
-            player2 = self.round_players[nb+1]
+            player1 = list_players_sorted[nb]
+            player2 = list_players_sorted[nb+1]
             self.add_match(match.Match(player1, player2))
             nb += 2
 

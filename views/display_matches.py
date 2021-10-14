@@ -7,7 +7,7 @@ class DisplayMatches:
     def display_players(self, players):
         print("Les joueurs suivants participent à ce round :")
         for player in players:
-            print(f"{player.first_name}; ")
+            print(f"{player}; ")
 
     def display_matches(self, matches):
         nb = 1
@@ -16,5 +16,6 @@ class DisplayMatches:
             nb += 1
 
     def ask_question(self, question):
+        print("Pour quitter, tapez 'q'")
         response = input(question)
         return response

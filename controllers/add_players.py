@@ -36,8 +36,7 @@ class AddPlayers:
                         self.informations_player[question[1]] = response
                     else:
                         print(test_response)
-            new_player = player.Player(self.informations_player)
-            self.tournament.add_players(new_player)
+            self.tournament.add_players(player.Player(self.informations_player))
             nb -= 1
             self.view_get_information_player.display_informations_player()
         self.view_get_information_player.display_informations("Tous les joueurs ont été ajoutés."
