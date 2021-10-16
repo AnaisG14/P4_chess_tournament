@@ -49,10 +49,9 @@ class CreateTournament:
                     self.attribut_tournament[question[1]] = response
                 else:
                     print(test_response)
-        self.new_tournament = tournament.Tournament(self.attribut_tournament)
+        self.new_tournament = tournament.Tournament(**self.attribut_tournament)
         self.tournament_view.display_responses(self.new_tournament)
         return add_players.AddPlayers(self.new_tournament)
 
-    def __str__(self):
-        return str(self.new_tournament)
+
 

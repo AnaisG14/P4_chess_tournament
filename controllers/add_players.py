@@ -14,17 +14,17 @@ class AddPlayers:
         self.player_index = 1
 
     def __call__(self):
-        # add questions the view to create the player
+        # add questions to the view to create the player
         self.view_get_information_player.add_questions("Nom du joueur:\n", "last_name", "required")
-        self.view_get_information_player.add_questions("prénom du joueur:\n", "surname", "required")
+        self.view_get_information_player.add_questions("prénom du joueur:\n", "first_name", "required")
         self.view_get_information_player.add_questions("Date de naisance du joueur (jj-mm-aaaa):\n", "birthday", "date")
         self.view_get_information_player.add_questions("sexe du joueur (M/F):\n", "sexe", ['M', 'F'])
         self.view_get_information_player.add_questions("rang du joueur:\n", "ranking", int)
 
-        nb = 2
+        nb = 8
         while nb:
         # ask question to manager
-            self.view_get_information_player.display_informations(f"Entrez les informotions du joueur {nb+1}")
+            self.view_get_information_player.display_informations(f"Entrez les informotions du joueur {nb}")
             self.add_player_index()
             for question in self.view_get_information_player.questions:
                 self.verification = False
@@ -36,7 +36,7 @@ class AddPlayers:
                         self.informations_player[question[1]] = response
                     else:
                         print(test_response)
-            self.tournament.add_players(player.Player(self.informations_player))
+            self.tournament.add_players(player.Player(**self.informations_player))
             nb -= 1
             self.view_get_information_player.display_informations_player()
         self.view_get_information_player.display_informations("Tous les joueurs ont été ajoutés."
