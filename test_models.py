@@ -19,86 +19,77 @@ information_tournament2 = {"tournament_name": "Autre tournois test",
                            "end_date": "05/11/2021"
                           }
 print("creation de 2 tournois et d'une liste de tournoi")
-tournois1 = tournament.Tournament(information_tournament1)
-tournois2 = tournament.Tournament(information_tournament2)
+tournois1 = tournament.Tournament(**information_tournament1)
+tournois2 = tournament.Tournament(**information_tournament2)
 print("affichage du nom premier tournoi")
 print(tournois1.tournament_name)
 print("affichage du 2nd tournoi")
 print(tournois2)
-print("ajout des tournoi à la liste créée")
 
 # test player et list_player
-dict_joueur1 = {"index" : 1,
-                "first_name" : "Anais",
+dict_joueur1 = {"first_name" : "Anais",
                 "last_name" : "Gatard",
-                "date_of_birthday" : "14-05-1977",
+                "birthday" : "14-05-1977",
                 "sexe" : "F",
                 "ranking" : 12
                 }
 
-dict_joueur2 = {"index" : 2,
-                "first_name" : "Fred",
+dict_joueur2 = {"first_name" : "Fred",
                 "last_name" : "Lesire",
-                "date_of_birthday" : "01-06-1969",
+                "birthday" : "01-06-1969",
                 "sexe" : "M",
                 "ranking" : 13
                 }
-dict_joueur3 = {"index" : 3,
-                "first_name" : "Guillaume",
+dict_joueur3 = {"first_name" : "Guillaume",
                 "last_name" : "Esnault",
-                "date_of_birthday" : "01-06-1969",
+                "birthday" : "01-06-1969",
                 "sexe" : "M",
                 "ranking" : 26
                 }
-dict_joueur4 = {"index" : 4,
-                "first_name" : "Jean",
+dict_joueur4 = {"first_name" : "Jean",
                 "last_name" : "Dupont",
-                "date_of_birthday" : "01-06-1969",
+                "birthday" : "01-06-1969",
                 "sexe" : "M",
                 "ranking" : 4
                 }
-dict_joueur5 = {"index" : 5,
-                "first_name" : "Paul",
+dict_joueur5 = {"first_name" : "Paul",
                 "last_name" : "Demarre",
-                "date_of_birthday" : "12-06-1973",
+                "birthday" : "12-06-1973",
                 "sexe" : "M",
                 "ranking" : 22
                 }
-dict_joueur6 = {"index" : 6,
-                "first_name" : "Christelle",
+dict_joueur6 = {"first_name" : "Christelle",
                 "last_name" : "Adam",
-                "date_of_birthday" : "29-12-1986",
+                "birthday" : "29-12-1986",
                 "sexe" : "F",
                 "ranking" : 16
                 }
-dict_joueur7 = {"index" : 7,
-                "first_name" : "Laure",
+dict_joueur7 = {"first_name" : "Laure",
                 "last_name" : "Laure",
-                "date_of_birthday" : "18-07-2008",
+                "birthday" : "18-07-2008",
                 "sexe" : "F",
                 "ranking" : 15
                 }
-dict_joueur8 = {"index" : 8,
-                "first_name" : "Jérémi",
+dict_joueur8 = {"first_name" : "Jérémi",
                 "last_name" : "Sno",
-                "date_of_birthday" : "07-04-2004",
+                "birthday" : "07-04-2004",
                 "sexe" : "M",
                 "ranking" : 29
                 }
-Anais = player.Player(dict_joueur1)
-Fred = player.Player(dict_joueur2)
-Guillaume = player.Player(dict_joueur3)
-Jean = player.Player(dict_joueur4)
-Paul = player.Player(dict_joueur5)
-Christelle = player.Player(dict_joueur6)
-Laure = player.Player(dict_joueur7)
-Jeremi = player.Player(dict_joueur8)
+Anais = player.Player(**dict_joueur1)
+Fred = player.Player(**dict_joueur2)
+Guillaume = player.Player(**dict_joueur3)
+Jean = player.Player(**dict_joueur4)
+Paul = player.Player(**dict_joueur5)
+Christelle = player.Player(**dict_joueur6)
+Laure = player.Player(**dict_joueur7)
+Jeremi = player.Player(**dict_joueur8)
 print("affichage des joueurs")
 print(Anais)
 print(Fred)
 print("modification du rang d'un joueur")
 Fred.modify_ranking(11)
-print(Fred)
+print(Fred.ranking)
 print("ajout des joueurs au tournoi1")
 tournois1.add_players(Anais)
 tournois1.add_players(Fred)
@@ -108,19 +99,16 @@ tournois1.add_players(Paul)
 tournois1.add_players(Christelle)
 tournois1.add_players(Laure)
 tournois1.add_players(Jeremi)
+for player in tournois1.players:
+    print(player)
 
 print("ajout des joueurs au tournoi2")
 tournois2.add_players(Anais)
-
-print("joueur du tournoi 1")
-for player in tournois1.players:
-    print(player)
-print("joueur du tournoi 2")
 for player in tournois2.players:
     print(player)
 
 print("créer un round")
-round1 = round.Round(tournois1.tournament_name, "round1", tournois1.players)
+round1 = round.Round(tournois1, "round1")
 tournois1.add_rounds(round1)
 for player in round1.round_players:
     print(player)
@@ -143,7 +131,7 @@ Jeremi.modifiy_score(Jeremi.score + 1)
 round1.add_end_time()
 print(f"round1 terminé à {round1.datetime_end}")
 print("nouveau round")
-round2 = round.Round(tournois1.tournament_name,"Round2", tournois1.players)
+round2 = round.Round(tournois1,"Round2")
 tournois1.add_rounds(round2)
 print("relance des matches")
 round2.generate_pairs()

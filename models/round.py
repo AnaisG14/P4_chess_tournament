@@ -5,10 +5,10 @@ from models import match
 class Round:
     """ Model for a round"""
 
-    def __init__(self,tournament, round):
+    def __init__(self,tournament, round_name):
         """ player is an attibut of tournament model"""
         self.tournament = tournament
-        self.round_name = round
+        self.round_name = round_name
         self.round_players = tournament.players
         self.matches = []
         self.datetime_start = datetime.now()
@@ -33,6 +33,7 @@ class Round:
         # classer les joueurs en fonction de leur score puis de leur rang
         global match
         list_players_sorted = sorted(self.round_players, key=attrgetter("score", "ranking"))
+        print(list_players_sorted)
         nb = 0
         while nb < len(self.round_players):
             player1 = list_players_sorted[nb]
