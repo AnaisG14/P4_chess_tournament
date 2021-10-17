@@ -19,7 +19,6 @@ class Round:
 
     def generate_first_pairs(self):
         # classer les joueurs en fonction de leur rang
-        global match
         list_players_sorted = sorted(self.round_players, key=attrgetter("ranking"))
         number_of_pairs = len(self.round_players)/2
         nb = 0
@@ -31,15 +30,45 @@ class Round:
 
     def generate_pairs(self):
         # classer les joueurs en fonction de leur score puis de leur rang
-        global match
+        essais = 0
         list_players_sorted = sorted(self.round_players, key=attrgetter("score", "ranking"))
         print(list_players_sorted)
-        nb = 0
-        while nb < len(self.round_players):
-            player1 = list_players_sorted[nb]
-            player2 = list_players_sorted[nb+1]
-            self.add_match(match.Match(player1, player2))
-            nb += 2
+        while list_players_sorted:
+            player1 = list_players_sorted.pop(0)
+            player2 = list_players_sorted[0]
+            test_pair = self.verify_pairs(player1, player2)
+            if test_pair == "ok":
+                player2 = list_players_sorted.pop(0)
+                self.add_match(match.Match(player1, player2))
+            else:
+                try:
+                    player2 = list_players_sorted.pop(1)
+                except IndexError:
+                    list_players_sorted = sorted(self.round_players, key=attrgetter("score", "ranking"))
+                    if essais == 0:
+                        list_players_sorted[1], list_players_sorted[2] = list_players_sorted[2], list_players_sorted[1]
+                    if essais == 1:
+                        list_players_sorted[2], list_players_sorted[3] = list_players_sorted[3], list_players_sorted[2]
+                    if essais == 2:
+                        list_players_sorted[3], list_players_sorted[4] = list_players_sorted[4], list_players_sorted[3]
+                    if essais == 3:
+                        list_players_sorted[1], list_players_sorted[3] = list_players_sorted[3], list_players_sorted[1]
+                    if essais == 4:
+                        list_players_sorted[2], list_players_sorted[4] = list_players_sorted[4], list_players_sorted[2]
+                    if essais == 5:
+                        return "Impossible d'associer les joueurs"
+                    essais += 1
+                    self.matches.clear()
+                else:
+                    self.add_match(match.Match(player1, player2))
+
+    def verify_pairs(self, player1, player2):
+        for round in self.tournament.rounds:
+            for match in round.matches:
+                if player1 in match.match:
+                    if player2 in match.match:
+                        return "impossible"
+        return "ok"
 
     def add_end_time(self):
         self.datetime_end = datetime.now()
