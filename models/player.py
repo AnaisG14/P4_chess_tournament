@@ -1,7 +1,9 @@
+from tinydb import TinyDB
+
 class Player:
     """ Creation of player """
 
-    def __init__(self, last_name, first_name, birthday, sexe, ranking, score=0):
+    def __init__(self, first_name, last_name, birthday, sexe, ranking, score=0):
         self.last_name = last_name
         self.first_name = first_name
         self.birthday = birthday
@@ -20,7 +22,16 @@ class Player:
         self.tournaments_participation.append(tounrnament_name)
 
     def save_player(self):
-        pass
+        serialized_player = {
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'birthday': self.birthday,
+            'sexe': self.sexe,
+            'ranking': self.ranking
+        }
+        db = TinyDB('db.json')
+        players_table = db.table('players')
+        players_table.insert(serialized_player)
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}: rang({self.ranking}), score({self.score})"

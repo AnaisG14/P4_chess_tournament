@@ -1,3 +1,7 @@
+from tinydb import TinyDB
+from operator import attrgetter
+from models import player
+
 class Report:
     """ affichage des éléments des tournois"""
 
@@ -14,18 +18,26 @@ class Report:
         self.all_tournaments.append(tournament)
 
 
-    def list_actors(self, sort_methode="score"):
+    def list_actors(self, sort_methode="classement"):
         """ display all the actors of all tournament
         You can sort by name or by score."""
         self.actors = []
-        for tournament in self.all_tournaments:
-            for actor in tournament.players:
-                self.actors.append((actor.last_name, actor.ranking))
+        db = TinyDB('db.json')
+        players_table = db.table("players")
+        serialized_actors = players_table.all()
+        for actor in serialized_actors:
+            first_name = actor['first_name']
+            last_name = actor['last_name']
+            birthday = actor['birthday']
+            sexe = actor['sexe']
+            ranking = int(actor['ranking'])
+            self.actors.append(player.Player(first_name, last_name, birthday, sexe, ranking))
+
         if sort_methode == "name":
-            self.actors.sort(key=lambda x: x[0])
+            self.actors.sort(key=attrgetter("last_name"))
             return self.actors
         else:
-            self.actors.sort(key=lambda x: x[1])
+            self.actors.sort(key=attrgetter("ranking"))
             return self.actors
 
     def list_players(self, tournament, sort_method="name"):
@@ -35,10 +47,10 @@ class Report:
         for player in tournament.players:
             self.tournament_players.append((player.last_name, player.score))
         if sort_method == "name":
-            self.tournament_players.sort(key=lambda x: x[0])
+            self.tournament_players.sort(key=attrgetter("last_name"))
             return self.tournament_players
         else:
-            self.tournament_players.sort(key=lambda x: x[1])
+            self.tournament_players.sort(key=attrgetter("ranking"))
             return self.tournament_players
 
     def list_tournament(self):

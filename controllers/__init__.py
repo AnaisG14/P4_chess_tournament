@@ -1,1 +1,1 @@
-__all__ = ["home_menu_controller", "create_tournament", "add_players", "view_reports"]
+__all__ = ["home_menu_controller", "create_tournament", "add_players", "reports", "launch_tournament"]
