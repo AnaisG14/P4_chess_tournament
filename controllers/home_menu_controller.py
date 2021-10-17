@@ -15,5 +15,6 @@ class HomeMenuController:
         # self.home_menu.add_item("auto", "Lancer le tournoi", launch_tournament.LaunchTournament("en attente"))
         self.home_menu.add_item("auto", "Afficher les rapports", reports.ReportActors())
 
+
         return self.menu_view.user_choice()
 

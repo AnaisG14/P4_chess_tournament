@@ -11,6 +11,7 @@ class Player:
         self.ranking = ranking
         self.tournaments_participation = []
         self.score = score
+        self.serialized_player = {}
 
     def modify_ranking(self, new_ranking):
         self.ranking = new_ranking
@@ -21,17 +22,22 @@ class Player:
     def add_tournament(self, tounrnament_name):
         self.tournaments_participation.append(tounrnament_name)
 
-    def save_player(self):
-        serialized_player = {
+    def serialized(self):
+        self.serialized_player = {
             'first_name': self.first_name,
             'last_name': self.last_name,
             'birthday': self.birthday,
             'sexe': self.sexe,
             'ranking': self.ranking
         }
+        return self.serialized_player
+
+
+    def save_player(self):
+        self.serialized()
         db = TinyDB('db.json')
         players_table = db.table('players')
-        players_table.insert(serialized_player)
+        players_table.insert(self.serialized_player)
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}: rang({self.ranking}), score({self.score})"

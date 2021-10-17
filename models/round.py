@@ -10,9 +10,13 @@ class Round:
         self.tournament = tournament
         self.round_name = round_name
         self.round_players = tournament.players
+        self.serialized_round_players = []
         self.matches = []
+        self.serialized_matches = []
         self.datetime_start = datetime.now()
         self.datetime_end = ""
+        self.serialized_datetime_start = f"{self.datetime_start}"
+        self.serialized_datetime_end = f"{self.datetime_end}"
 
     def add_match(self, match):
         self.matches.append(match)
@@ -72,6 +76,22 @@ class Round:
 
     def add_end_time(self):
         self.datetime_end = datetime.now()
+
+    def serialized(self):
+        for match in self.matches:
+            serialized_match = match.serialized()
+            self.serialized_matches.append(serialized_match)
+        for player in self.round_players:
+            serialized_player = player.serialized()
+            self.serialized_round_players.append(serialized_player)
+        self.serialized_round = {
+            'round_name': self.round_name,
+            'round_players': self.serialized_round_players,
+            'matches': self.serialized_matches,
+            'datetime_start': self.serialized_datetime_start,
+            'datetime_end': self.serialized_datetime_end,
+        }
+        return self.serialized_round
 
     def __str__(self):
         return f"nom du tournoi: {self.round_name}\n" \

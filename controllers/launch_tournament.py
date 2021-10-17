@@ -26,7 +26,7 @@ class LaunchTournament:
         self.rounds_view.display_matches(new_round.matches)
         self.tournament.add_rounds(new_round)
         self.wait_response("entrer les scores")
-        new.round.add_end_time()
+        new_round.add_end_time()
         self.add_score(new_round)
 
 
@@ -67,8 +67,11 @@ class LaunchTournament:
         self.rounds_view.display_matches(new_round.matches)
         self.tournament.add_rounds(new_round)
         self.wait_response("entrer les scores")
-        new.round.add_end_time()
+        new_round.add_end_time()
         self.add_score(new_round)
+        self.wait_response("Enregistrer")
+        self.tournament.save_tournament()
+
 
     def wait_response(self, question):
         response = self.rounds_view.ask_question(f"Tapez 'q' pour quitter ou 'entrez' pour {question}")
