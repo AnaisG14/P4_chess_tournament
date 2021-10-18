@@ -110,15 +110,15 @@ class Round:
             deserialized_player = player.Player.deserialize(serialized_player)
             recreate_player = player.Player.get(deserialized_player)
             recreate_round_players.append(recreate_player)
-        matches = serialized_round['match']
+        matches = serialized_round['matches']
         recreate_matches = []
         for serialized_match in matches:
             deserialized_match = match.Match.deserialized_match(serialized_match)
             recreate_match = match.Match.get(deserialized_match)
             recreate_matches.append(recreate_match)
 
-        datetime_start = serialised_round['datetime_start']
-        datetime_end = serialised_round['datetime_end']
+        datetime_start = serialized_round['datetime_start']
+        datetime_end = serialized_round['datetime_end']
         return {'round_name':round_name,
                 'round_players': recreate_round_players,
                 'matches': recreate_matches,

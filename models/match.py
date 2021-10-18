@@ -5,7 +5,7 @@ class MatchManager:
     @classmethod
     def get(cls, deserialized_match):
         """ get information of players using deserialize method"""
-        mathc = Match(**deserialized_match)
+        match = Match(**deserialized_match)
         return match
 
 class Match:

@@ -124,8 +124,9 @@ class Tournament:
         recreate_tournament = cls.get(informations_to_create_tournament)
         rounds_number = serialized_tournament['rounds_number']
         rounds_name = serialized_tournament['rounds_name']
-        for rounds in rounds_name:
-            deserialized_round = round.Round.deserialized_round(rounds)
+        rounds = serialized_tournament['rounds']
+        for serialized_round in rounds:
+            deserialized_round = round.Round.deserialized_round(serialized_round)
             recreate_round = round.Round(recreate_tournament, deserialized_round['round_name'])
             recreate_tournament.rounds.append(recreate_round)
         players = serialized_tournament['players']

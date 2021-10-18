@@ -1,5 +1,5 @@
 from models import tournament, player, round
-from utils import deserialisation
+from controllers import launch_tournament
 
 information_tournament1 = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
@@ -127,4 +127,7 @@ print(serialized_tournois1)
 # tournois1.save_tournament()
 
 tournois2 = tournament.Tournament.recreate_tournament(serialized_tournois1)
-print(tournois2)
+print(f"test réussi: \n {tournois2}")
+
+app = launch_tournament.LaunchTournament(tournois2)
+app()
