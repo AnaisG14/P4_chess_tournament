@@ -1,8 +1,46 @@
 from tinydb import TinyDB
 
+class PlayerManager:
+    """ serialize and deserialize players and save them into a tinyDB"""
+
+#     @classmethod
+#     def deserialize(cls, serialized_player):
+#         """ deserialize method"""
+#         first_name = serialized_player['first_name']
+#         last_name = serialized_player['last_name']
+#         birthday = serialized_player['birthday']
+#         sexe = serialized_player['sexe']
+#         ranking = serialized_player['ranking']
+#         return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
+#                 'ranking': ranking}
+#
+    @classmethod
+    def get(cls, deserialized_player):
+        """ get information of players using deserialize method"""
+        player = Player(**deserialized_player)
+        return player
+
+#     @classmethod
+#     def serialize(cls, data_player):
+#         cls.serialized_player = {
+#             'first_name': data_player.first_name,
+#             'last_name': data_player.last_name,
+#             'birthday': data_player.birthday,
+#             'sexe': data_player.sexe,
+#             'ranking': data_player.ranking
+#         }
+#         return cls.serialized_player
+#
+#     @classmethod
+#     def save(cls):
+#         data_to_save = cls.serialize()
+#         db = TinyDB('db.json')
+#         players_table = db.table('players')
+#         players_table.insert(data_to_save)
+
 class Player:
     """ Creation of player """
-
+    manager = PlayerManager()
     def __init__(self, first_name, last_name, birthday, sexe, ranking, score=0):
         self.last_name = last_name
         self.first_name = first_name
@@ -11,7 +49,6 @@ class Player:
         self.ranking = ranking
         self.tournaments_participation = []
         self.score = score
-        self.serialized_player = {}
 
     def modify_ranking(self, new_ranking):
         self.ranking = new_ranking
@@ -22,22 +59,41 @@ class Player:
     def add_tournament(self, tounrnament_name):
         self.tournaments_participation.append(tounrnament_name)
 
-    def serialized(self):
+    def serialize(self):
+        # self.manager.serialize(self)
         self.serialized_player = {
             'first_name': self.first_name,
             'last_name': self.last_name,
             'birthday': self.birthday,
             'sexe': self.sexe,
-            'ranking': self.ranking
+            'ranking': self.ranking,
+            'score': self.score
         }
         return self.serialized_player
 
-
     def save_player(self):
-        self.serialized()
+        # self.manager.save()
+        serialized_player = self.serialize()
         db = TinyDB('db.json')
         players_table = db.table('players')
-        players_table.insert(self.serialized_player)
+        players_table.insert(serialized_player)
+
+    @classmethod
+    def deserialize(cls, serialized_player):
+        """ deserialize method"""
+        first_name = serialized_player['first_name']
+        last_name = serialized_player['last_name']
+        birthday = serialized_player['birthday']
+        sexe = serialized_player['sexe']
+        ranking = serialized_player['ranking']
+        return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
+                'ranking': ranking}
+
+    @classmethod
+    def get(cls, serialized_player):
+        deserialized_player = cls.deserialize(serialized_player)
+        instance = cls.manager.get(deserialized_player)
+        return instance
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}: rang({self.ranking}), score({self.score})"

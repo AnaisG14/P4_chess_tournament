@@ -1,8 +1,17 @@
 from tinydb import TinyDB
+from models import round, match, player
+
+class TournamentManager:
+    """ serialize and deserialize players and save them into a tinyDB"""
+    @classmethod
+    def get(cls, deserialized_tournament):
+        """ get information of players using deserialize method"""
+        tournament = Tournament(**deserialized_tournament)
+        return tournament
 
 class Tournament:
     """ Model of tournament"""
-
+    manager = TournamentManager()
     def __init__(self, tournament_name, tournament_place, rounds_number, time_controller,
                  manager_description, start_date, end_date):
         self.tournament_name = tournament_name
@@ -66,7 +75,7 @@ class Tournament:
             serialized_round = round.serialized()
             self.serialized_rounds.append(serialized_round)
         for player in self.players:
-            serialized_player = player.serialized()
+            serialized_player = player.serialize()
             self.serialized_players.append(serialized_player)
         self.serialized_tournament = {
             'tournament_name': self.tournament_name,
@@ -89,6 +98,49 @@ class Tournament:
         tournament_table = db.table('tournaments')
         tournament_table.truncate()
         tournament_table.insert(self.serialized_tournament)
+
+    @classmethod
+    def deserialize(cls, serialized_tournament):
+        tournament_name = serialized_tournament['tournament_name']
+        tournament_place = serialized_tournament['tournament_place']
+        rounds_number = serialized_tournament['rounds_number']
+        time_controller = serialized_tournament['time_controller']
+        manager_description = serialized_tournament['manager_description']
+        start_date = serialized_tournament['start_date']
+        end_date = serialized_tournament['end_date']
+        informations_to_create_tournament = {'tournament_name': tournament_name,
+                                   'tournament_place':tournament_place,
+                                   'rounds_number': rounds_number,
+                                   'time_controller': time_controller,
+                                   'manager_description': manager_description,
+                                   'start_date': start_date,
+                                   'end_date': end_date
+                                   }
+        return informations_to_create_tournament
+
+    @classmethod
+    def recreate_tournament(cls, serialized_tournament):
+        informations_to_create_tournament = cls.deserialize(serialized_tournament)
+        recreate_tournament = cls.get(informations_to_create_tournament)
+        rounds_number = serialized_tournament['rounds_number']
+        rounds_name = serialized_tournament['rounds_name']
+        for rounds in rounds_name:
+            deserialized_round = round.Round.deserialized_round(rounds)
+            recreate_round = round.Round(recreate_tournament, deserialized_round['round_name'])
+            recreate_tournament.rounds.append(recreate_round)
+        players = serialized_tournament['players']
+        for serialized_player in players:
+            deserialized_player = player.Player.deserialize(serialized_player)
+            recreate_player = player.Player.get(deserialized_player)
+            recreate_tournament.players.append(recreate_player)
+        recreate_tournament.results = serialized_tournament['result']
+        return recreate_tournament
+
+    @classmethod
+    def get(cls, serialized_tournament):
+        deserialized_tournament = cls.deserialize(serialized_tournament)
+        instance = cls.manager.get(deserialized_tournament)
+        return instance
 
 
 

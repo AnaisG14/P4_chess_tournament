@@ -1,10 +1,18 @@
 from datetime import datetime
 from operator import attrgetter
-from models import match
+from models import round, match, player
+
+class RoundManager:
+    """ serialize and deserialize players and save them into a tinyDB"""
+    @classmethod
+    def get(cls, deserialized_round):
+        """ get information of players using deserialize method"""
+        round = Round(**deserialized_round)
+        return round
 
 class Round:
     """ Model for a round"""
-
+    manager = RoundManager()
     def __init__(self,tournament, round_name):
         """ player is an attibut of tournament model"""
         self.tournament = tournament
@@ -82,7 +90,7 @@ class Round:
             serialized_match = match.serialized()
             self.serialized_matches.append(serialized_match)
         for player in self.round_players:
-            serialized_player = player.serialized()
+            serialized_player = player.serialize()
             self.serialized_round_players.append(serialized_player)
         self.serialized_round = {
             'round_name': self.round_name,
@@ -92,6 +100,37 @@ class Round:
             'datetime_end': self.serialized_datetime_end,
         }
         return self.serialized_round
+
+    @classmethod
+    def deserialized_round(cls, serialized_round):
+        round_name = serialized_round['round_name']
+        round_players = serialized_round['round_players']
+        recreate_round_players = []
+        for serialized_player in round_players:
+            deserialized_player = player.Player.deserialize(serialized_player)
+            recreate_player = player.Player.get(deserialized_player)
+            recreate_round_players.append(recreate_player)
+        matches = serialized_round['match']
+        recreate_matches = []
+        for serialized_match in matches:
+            deserialized_match = match.Match.deserialized_match(serialized_match)
+            recreate_match = match.Match.get(deserialized_match)
+            recreate_matches.append(recreate_match)
+
+        datetime_start = serialised_round['datetime_start']
+        datetime_end = serialised_round['datetime_end']
+        return {'round_name':round_name,
+                'round_players': recreate_round_players,
+                'matches': recreate_matches,
+                'datetime_start': datetime_start,
+                'datetime_end': datetime_end
+                }
+
+    @classmethod
+    def get(cls, serialized_round):
+        deserialized_round = cls.deserialized_round(serialized_round)
+        instance = cls.manager.get(deserialized_round)
+        return instance
 
     def __str__(self):
         return f"nom du tournoi: {self.round_name}\n" \
