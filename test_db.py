@@ -115,7 +115,7 @@ print(round2.matches)
 
 serialized_anais = Anais.serialize()
 print(serialized_anais)
-info_anais_bis = player.Player.deserialize(serialized_anais)
+info_anais_bis = player.PlayerManager.deserialize(serialized_anais)
 print(f"type info_anais_bis: {type(info_anais_bis)}")
 anais_bis = player.Player.get(info_anais_bis)
 # anais_bis = player.Player(**info_anais_bis)

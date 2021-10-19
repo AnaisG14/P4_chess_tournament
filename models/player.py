@@ -3,33 +3,25 @@ from tinydb import TinyDB
 class PlayerManager:
     """ serialize and deserialize players and save them into a tinyDB"""
 
-#     @classmethod
-#     def deserialize(cls, serialized_player):
-#         """ deserialize method"""
-#         first_name = serialized_player['first_name']
-#         last_name = serialized_player['last_name']
-#         birthday = serialized_player['birthday']
-#         sexe = serialized_player['sexe']
-#         ranking = serialized_player['ranking']
-#         return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
-#                 'ranking': ranking}
-#
+    @classmethod
+    def deserialize(cls, serialized_player):
+        """ deserialize method"""
+        first_name = serialized_player['first_name']
+        last_name = serialized_player['last_name']
+        birthday = serialized_player['birthday']
+        sexe = serialized_player['sexe']
+        ranking = serialized_player['ranking']
+        score = serialized_player['score']
+        return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
+                'ranking': ranking, 'score': score}
+
     @classmethod
     def get(cls, deserialized_player):
         """ get information of players using deserialize method"""
         player = Player(**deserialized_player)
         return player
 
-#     @classmethod
-#     def serialize(cls, data_player):
-#         cls.serialized_player = {
-#             'first_name': data_player.first_name,
-#             'last_name': data_player.last_name,
-#             'birthday': data_player.birthday,
-#             'sexe': data_player.sexe,
-#             'ranking': data_player.ranking
-#         }
-#         return cls.serialized_player
+
 #
 #     @classmethod
 #     def save(cls):
@@ -79,19 +71,8 @@ class Player:
         players_table.insert(serialized_player)
 
     @classmethod
-    def deserialize(cls, serialized_player):
-        """ deserialize method"""
-        first_name = serialized_player['first_name']
-        last_name = serialized_player['last_name']
-        birthday = serialized_player['birthday']
-        sexe = serialized_player['sexe']
-        ranking = serialized_player['ranking']
-        return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
-                'ranking': ranking}
-
-    @classmethod
     def get(cls, serialized_player):
-        deserialized_player = cls.deserialize(serialized_player)
+        deserialized_player = cls.manager.deserialize(serialized_player)
         instance = cls.manager.get(deserialized_player)
         return instance
 

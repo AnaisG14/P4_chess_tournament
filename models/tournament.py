@@ -72,7 +72,7 @@ class Tournament:
 
     def serialized(self):
         for round in self.rounds:
-            serialized_round = round.serialized()
+            serialized_round = round.serialize()
             self.serialized_rounds.append(serialized_round)
         for player in self.players:
             serialized_player = player.serialize()
@@ -126,12 +126,12 @@ class Tournament:
         rounds_name = serialized_tournament['rounds_name']
         rounds = serialized_tournament['rounds']
         for serialized_round in rounds:
-            deserialized_round = round.Round.deserialized_round(serialized_round)
+            deserialized_round = round.RoundManager.deserialize(serialized_round)
             recreate_round = round.Round(recreate_tournament, deserialized_round['round_name'])
             recreate_tournament.rounds.append(recreate_round)
         players = serialized_tournament['players']
         for serialized_player in players:
-            deserialized_player = player.Player.deserialize(serialized_player)
+            deserialized_player = player.PlayerManager.deserialize(serialized_player)
             recreate_player = player.Player.get(deserialized_player)
             recreate_tournament.players.append(recreate_player)
         recreate_tournament.results = serialized_tournament['result']

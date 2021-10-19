@@ -4,6 +4,33 @@ from models import round, match, player
 
 class RoundManager:
     """ serialize and deserialize players and save them into a tinyDB"""
+
+    @classmethod
+    def deserialize(cls, serialized_round):
+        round_name = serialized_round['round_name']
+        round_players = serialized_round['round_players']
+        recreate_round_players = []
+        for serialized_player in round_players:
+            deserialized_player = player.PlayerManager.deserialize(serialized_player)
+            recreate_player = player.Player.get(deserialized_player)
+            recreate_round_players.append(recreate_player)
+        matches = serialized_round['matches']
+        recreate_matches = []
+        for serialized_match in matches:
+            deserialized_match = match.MatchManager.deserialize(serialized_match)
+            recreate_match = match.Match.get(deserialized_match)
+            recreate_matches.append(recreate_match)
+
+        datetime_start = serialized_round['datetime_start']
+        datetime_end = serialized_round['datetime_end']
+        return {'round_name':round_name,
+                'round_players': recreate_round_players,
+                'matches': recreate_matches,
+                'datetime_start': datetime_start,
+                'datetime_end': datetime_end
+                }
+
+
     @classmethod
     def get(cls, deserialized_round):
         """ get information of players using deserialize method"""
@@ -85,9 +112,9 @@ class Round:
     def add_end_time(self):
         self.datetime_end = datetime.now()
 
-    def serialized(self):
+    def serialize(self):
         for match in self.matches:
-            serialized_match = match.serialized()
+            serialized_match = match.serialize()
             self.serialized_matches.append(serialized_match)
         for player in self.round_players:
             serialized_player = player.serialize()
@@ -101,34 +128,10 @@ class Round:
         }
         return self.serialized_round
 
-    @classmethod
-    def deserialized_round(cls, serialized_round):
-        round_name = serialized_round['round_name']
-        round_players = serialized_round['round_players']
-        recreate_round_players = []
-        for serialized_player in round_players:
-            deserialized_player = player.Player.deserialize(serialized_player)
-            recreate_player = player.Player.get(deserialized_player)
-            recreate_round_players.append(recreate_player)
-        matches = serialized_round['matches']
-        recreate_matches = []
-        for serialized_match in matches:
-            deserialized_match = match.Match.deserialized_match(serialized_match)
-            recreate_match = match.Match.get(deserialized_match)
-            recreate_matches.append(recreate_match)
-
-        datetime_start = serialized_round['datetime_start']
-        datetime_end = serialized_round['datetime_end']
-        return {'round_name':round_name,
-                'round_players': recreate_round_players,
-                'matches': recreate_matches,
-                'datetime_start': datetime_start,
-                'datetime_end': datetime_end
-                }
 
     @classmethod
     def get(cls, serialized_round):
-        deserialized_round = cls.deserialized_round(serialized_round)
+        deserialized_round = cls.manager.deserialize(serialized_round)
         instance = cls.manager.get(deserialized_round)
         return instance
 
