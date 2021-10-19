@@ -73,7 +73,7 @@ class Player:
     @classmethod
     def get(cls, serialized_player):
         deserialized_player = cls.manager.deserialize(serialized_player)
-        instance = cls.manager.get(deserialized_player)
+        instance = cls(**deserialized_player)
         return instance
 
     def __str__(self):

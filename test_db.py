@@ -7,7 +7,11 @@ information_tournament1 = {"tournament_name": "Tournois test",
                           "time_controller": "bullet",
                           "manager_description": "test pour un premier tournois",
                           "start_date": "04/10/2021",
-                           "end_date": "05/10/2021"
+                           "end_date": "05/10/2021",
+                            'rounds_name': [],
+                            'rounds': [],
+                            'players': [],
+                            'results': []
                           }
 tournois1 = tournament.Tournament(**information_tournament1)
 
@@ -126,7 +130,7 @@ serialized_tournois1 = tournois1.serialized()
 print(serialized_tournois1)
 # tournois1.save_tournament()
 
-tournois2 = tournament.Tournament.recreate_tournament(serialized_tournois1)
+tournois2 = tournament.Tournament.get(serialized_tournois1)
 print(f"test réussi: \n {tournois2}")
 
 app = launch_tournament.LaunchTournament(tournois2)
