@@ -36,8 +36,8 @@ class Match:
 
     @classmethod
     def deserialized_match(cls, serialized_match):
-        player1 = player.Player.deserialize(serialized_match['player1'])
-        player2 = player.Player.deserialize(serialized_match['player2'])
+        player1 = player.PlayerManager.deserialize(serialized_match['player1'])
+        player2 = player.PlayerManager.deserialize(serialized_match['player2'])
         return {'player1': player1, 'player2': player2}
 
     @classmethod
