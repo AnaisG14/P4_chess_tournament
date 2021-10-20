@@ -19,3 +19,5 @@ class HomeMenuView:
         while self.choice not in self.keys:
             self.choice = input("Que voulez-vous faire ? Entrez le numero correspondant")
         return self.menu_view.menu_entries[self.choice][1]
+
+

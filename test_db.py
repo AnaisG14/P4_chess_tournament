@@ -1,7 +1,7 @@
 from models import tournament, player, round
 from controllers import launch_tournament
 
-information_tournament1 = {"tournament_name": "Tournois test",
+information_tournament1 = {"tournament_name": "Tournois Paris",
                           "tournament_place": "Sens",
                           "rounds_number": 4,
                           "time_controller": "bullet",
@@ -128,10 +128,15 @@ anais_bis.save_player()
 
 serialized_tournois1 = tournois1.serialized()
 print(serialized_tournois1)
-# tournois1.save_tournament()
+tournois1.save_tournament()
 
 tournois2 = tournament.Tournament.get(serialized_tournois1)
 print(f"test réussi: \n {tournois2}")
 
-app = launch_tournament.LaunchTournament(tournois2)
-app()
+# app = launch_tournament.LaunchTournament(tournois2)
+# app()
+
+test = tournament.TournamentManager.get_all_from_db()
+for tournament in test:
+    print(tournament['tournament_name'])
+

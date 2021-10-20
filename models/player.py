@@ -15,14 +15,6 @@ class PlayerManager:
         return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
                 'ranking': ranking, 'score': score}
 
-    @classmethod
-    def get(cls, deserialized_player):
-        """ get information of players using deserialize method"""
-        player = Player(**deserialized_player)
-        return player
-
-
-#
 #     @classmethod
 #     def save(cls):
 #         data_to_save = cls.serialize()

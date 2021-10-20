@@ -1,24 +1,33 @@
-from models import round
-from views import display_matches
+from models import round, tournament
+from views import display_matches, tournament_view
 
 class LaunchTournament:
     """ Générer les paires de joueurs"""
-    def __init__(self, tournament):
-        self.tournament = tournament
+    def __init__(self, tournament_instance=""):
+        self.tournament_view = tournament_view.TournamentView()
+        self.choice = ""
+        if tournament_instance:
+            self.tournament = tournament_instance
+        else:
+            self.tournament = tournament.Tournament.get(self.get_tournament_in_progress())
         self.rounds_name = tournament.rounds_name
         self.rounds_view = display_matches.DisplayMatches()
         self.verification = False
 
     def __call__(self):
-        self.wait_response("lancer le premier round.")
-        self.generate_first_round()
-        nb = 1
-        while nb < len(self.tournament.rounds_name):
-            self.generate_rounds(f"Round {nb+1}")
-            nb += 1
-        results = self.tournament.display_results()
-        self.rounds_view.display_classement(results)
+        while len(self.tournament.rounds) < len(self.tournament.rounds_number):
+            if not self.tournament.rounds:
+                self.wait_response("lancer le premier round.")
+                self.generate_first_round()
+            self.generate_rounds(f"Round {self.tournament.rounds_name[len(self.tournament.rounds)+1]}")
+            results = self.tournament.display_results()
+            self.rounds_view.display_classement(results)
 
+    def get_tournament_in_progress(self):
+        tournament_data = tournament.Tournament.get_tournament_in_progress()
+        self.choice = self.tournament_view.display_tournament_in_progress(tournament_data)
+        if self.choice in tournament_data.keys():
+            return tournament_data[self.choice]
 
     def generate_first_round(self):
         new_round = round.Round(self.tournament, self.tournament.rounds_name[0])

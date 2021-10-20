@@ -1,4 +1,4 @@
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 from models import round, match, player
 
 class TournamentManager:
@@ -38,10 +38,10 @@ class TournamentManager:
         return informations_to_create_tournament
 
     @classmethod
-    def get(cls, deserialized_tournament):
-        """ get information of players using deserialize method"""
-        tournament = Tournament(**deserialized_tournament)
-        return tournament
+    def get_all_from_db(cls):
+        db = TinyDB('db.json')
+        tournament_table = db.table('tournaments')
+        return tournament_table.all()
 
 class Tournament:
     """ Model of tournament"""
@@ -136,6 +136,17 @@ class Tournament:
         tournament_table = db.table('tournaments')
         tournament_table.truncate()
         tournament_table.insert(self.serialized_tournament)
+
+    @classmethod
+    def get_tournament_in_progress(cls):
+        tournament_data = cls.manager.get_all_from_db()
+        tournament_in_progress = {}
+        key = 1
+        for tournament in tournament_data:
+            if not tournament['results']:
+                tournament_in_progress[key] = tournament
+                key += 1
+        return tournament_in_progress
 
     @classmethod
     def get(cls, serialized_tournament):
