@@ -1,5 +1,3 @@
-from models import tournament
-
 class HomeMenu():
     """ Model for the home menu """
 
@@ -7,15 +5,15 @@ class HomeMenu():
         self.menu_entries = {}
         self.auto_key = 1
 
-    def add_item(self, key, entries, controller):
+    def add_item(self, key, entries, controller=""):
         """ Add item to the menu"""
         if key == "auto":
             key = str(self.auto_key)
             self.auto_key += 1
+        else:
+            controller = ""
         self.menu_entries[key] = (entries, controller)
         return
-
-
 
     def __repr__(self):
         return f"{self.menu_entries}"

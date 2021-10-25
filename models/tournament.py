@@ -1,8 +1,10 @@
 from tinydb import TinyDB
 from models import round, player
+from utils import connexion_db
 
 class TournamentManager:
     """ serialize and deserialize players and save them into a tinyDB"""
+    manage_db = connexion_db.ManagementDB()
 
     @classmethod
     def deserialize(cls, serialized_tournament):
@@ -18,14 +20,18 @@ class TournamentManager:
         deserialized_rounds = serialized_tournament['rounds']
         deserialized_results = serialized_tournament['results']
         for serialized_round in deserialized_rounds:
-            rounds.append(round.RoundManager.deserialize(serialized_round))
+            rounds.append(round.Round.get(serialized_round))
         players = []
         deserialized_players = serialized_tournament['players']
         for serialized_player in deserialized_players:
-            players.append(player.PlayerManager.deserialize(serialized_player))
+            players.append(player.Player.get(serialized_player))
+        players_scores = []
+        deserialized_player_score = serialized_tournament['players_scores']
+        for serialized_player_score in deserialized_player_score:
+            players_scores.append([player.Player.get(serialized_player_score[0]), serialized_player_score[1]])
         results = []
         for serialilized_result in deserialized_results:
-            result_player = [player.PlayerManager.deserialize(
+            result_player = [player.Player.get(
                 serialilized_result[0]), serialilized_result[1]]
             results.append(result_player)
         informations_to_create_tournament = {'tournament_name': tournament_name,
@@ -44,16 +50,15 @@ class TournamentManager:
 
     @classmethod
     def get_all_from_db(cls):
-        db = TinyDB('db.json')
-        tournament_table = db.table('tournaments')
-        return tournament_table.all()
+        return cls.manage_db.get('tournaments')
 
 class Tournament:
     """ Model of tournament"""
     manager = TournamentManager()
+
     def __init__(self, tournament_name, tournament_place, rounds_number, time_controller,
                  manager_description, start_date, end_date, rounds_name=[], rounds=[],
-                 players=[], results=[]):
+                 players=[], players_scores=[], results=[]):
         self.tournament_name = tournament_name
         self.tournament_place = tournament_place
         self.rounds_number = rounds_number
@@ -75,8 +80,11 @@ class Tournament:
         self.serialized_rounds = []
         self.players = players
         self.serialized_players = []
+        self.players_scores = players_scores
+        self.serialized_players_scores = []
         self.results = results
         self.serialized_results = []
+        self.save_tournament = connexion_db.ManagementDB()
 
     def create_rounds_name(self):
         nb = 1
@@ -86,9 +94,7 @@ class Tournament:
             nb += 1
             rounds_number -= 1
 
-    def display_results(self, tournament_results):
-        for item in tournament_results:
-            self.results.append(item)
+    def display_results(self):
         self.results.sort(key=lambda x: x[1], reverse=True)
         return self.results
 
@@ -117,18 +123,18 @@ class Tournament:
         self.rounds.append(round)
 
     def serialize(self):
-        for round in self.rounds:
-            serialized_round = round.serialize()
+        for each_round in self.rounds:
+            serialized_round = each_round.serialize()
             self.serialized_rounds.append(serialized_round)
         for each_player in self.players:
             serialized_player = each_player.serialize()
             self.serialized_players.append(serialized_player)
-        if self.results:
-            for each_result in self.results:
-                serialized_result = each_result[0].serialize()
-                self.serialized_results.append([serialized_result, each_result[1]])
-            else:
-                self.serialized_results = []
+        for each_player in self.players_scores:
+            serialized_player1 = each_player[0].serialize()
+            self.serialized_players_scores.append([serialized_player1, each_player[1]])
+        for each_result in self.results:
+            serialized_result = each_result[0].serialize()
+            self.serialized_results.append([serialized_result, each_result[1]])
         serialized_tournament = {
             'tournament_name': self.tournament_name,
             'tournament_place': self.tournament_place,
@@ -140,16 +146,14 @@ class Tournament:
             'rounds_name': self.rounds_name,
             'rounds': self.serialized_rounds,
             'players': self.serialized_players,
+            'players_scores': self.serialized_players_scores,
             'results': self.serialized_results
         }
         return serialized_tournament
 
-    def save_tournament(self):
+    def save(self):
         serialized_tournament = self.serialize()
-        db = TinyDB('db.json')
-        tournament_table = db.table('tournaments')
-        tournament_table.truncate()
-        tournament_table.insert(serialized_tournament)
+        self.save_tournament.save('tournaments', serialized_tournament)
 
     @classmethod
     def get_tournament_in_progress(cls):
@@ -164,14 +168,13 @@ class Tournament:
 
     @classmethod
     def get(cls):
+        tournaments = []
         results_db = cls.manager.get_all_from_db()
         for item in results_db:
             deserialized_tournament = cls.manager.deserialize(item)
-            recreate_tournament = cls(**deserialized_tournament)
-            recreate_tournament.players = [player.Player.get(x) for x in recreate_tournament.players]
-            recreate_tournament.rounds = [round.Round.get(x) for x in recreate_tournament.rounds]
-            recreate_tournament.results = [[player.Player.get(x[0]), x[1]] for x in recreate_tournament.results ]
-            return recreate_tournament
+            tournaments.append(cls(**deserialized_tournament))
+        return tournaments
+
 
 
 

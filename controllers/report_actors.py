@@ -1,11 +1,11 @@
-from models import report
-from views import view_report
+from models import list_actors_report
+from views import view_report_list_player
 
 class ReportActors:
     def __init__(self):
-        self.report = report.Report()
+        self.report = list_actors_report.Report()
         self.actors = []
-        self.display_report = view_report.ViewReportActors()
+        self.display_report = view_report_list_player.ViewReportActors()
 
     def __call__(self):
         test_reponse = False
@@ -22,3 +22,5 @@ class ReportActors:
                 test_reponse = True
             else:
                 print("Vous devez choisir 1 ou 2")
+
+

@@ -1,9 +1,9 @@
-from models import tournament, player, round, match
+from models import tournament, player, round, match, management_tournament
 from controllers import launch_tournament
 from tinydb import TinyDB
 
-information_tournament1 = {"tournament_name": "Tournois Sens",
-                          "tournament_place": "Sens",
+information_tournament1 = {"tournament_name": "Tournois paris",
+                          "tournament_place": "paris",
                           "rounds_number": 2,
                           "time_controller": "bullet",
                           "manager_description": "test pour un premier tournois",
@@ -84,13 +84,9 @@ tournois1.add_players(Laure)
 tournois1.add_players(Jeremi)
 print(f"ajout d'un joueur {tournois1.players}")
 
-print("lancement d'un tournoi")
-lancement_tournois = launch_tournament.LaunchTournament(tournois1)
-lancement_tournois()
-print(f"round1: {tournois1.rounds[0].round_players}")
-print(f"round2: {tournois1.rounds[1].round_players}")
-print(f"dernier round: {tournois1.rounds[-1].round_players}")
-
+# print("lancement d'un tournoi")
+# lancement_tournois = launch_tournament.LaunchTournament(tournois1)
+# lancement_tournois()
 
 
 # round1 = round.Round(tournois1)
@@ -105,16 +101,29 @@ print(f"dernier round: {tournois1.rounds[-1].round_players}")
 # tournois1.add_rounds(round1)
 # s_tournois1 = tournois1.serialize()
 # print(s_tournois1)
-tournois1.save_tournament()
 
+# tournois1.save()
 
-
-# s_match = match_test.serialize()
-# print(s_match)
-
+# tournois2 = tournament.Tournament.get()
+# print(tournois2)
+# for tournois in tournois2:
+#     print(f"nom tournois2: {tournois.tournament_name}")
+#     # print(f"joueurs tournois: {tournois.players}")
+#     # print(f"rounds: {tournois.rounds}")
+# # tournois2[0].save()
+#
+# # s_match = match_test.serialize()
+# # print(s_match)
+#
 # db = TinyDB('db.json')
 # tournaments_table = db.table('tournaments')
 # tournaments_players = db.table('players')
+# tournois = tournaments_table.all()
+# print(len(tournois))
+
+test = management_tournament.ManagementTournament()
+for tournament in test.all_tournaments:
+    print(type(tournament))
 # tournaments_table.truncate()
 # tournaments_players.truncate()
 # tournaments_table.insert(s_tournois1)

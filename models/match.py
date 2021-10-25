@@ -5,10 +5,10 @@ class MatchManager:
 
     @classmethod
     def deserialize(cls, serialized_match):
-        serialized_player1 = serialized_match[0]
-        serialized_player2 = serialized_match[1]
-        return {'match': [[player.PlayerManager.deserialize(serialized_player1[0]), serialized_player1[1]],
-                          [player.PlayerManager.deserialize(serialized_player2[0]), serialized_player2[1]]]
+        serialized_player1 = serialized_match['match'][0]
+        serialized_player2 = serialized_match['match'][1]
+        return {'match': [[player.Player.get(serialized_player1[0]), serialized_player1[1]],
+                          [player.Player.get(serialized_player2[0]), serialized_player2[1]]]
                 }
 
 
@@ -20,6 +20,10 @@ class Match:
         # self.player1 = player1
         # self.player2 = player2
         self.match = (player1, player2)
+
+    def modify_score(self, score):
+        self.match[0][1] += float(score)
+        self.match[1][1] += 1 - float(score)
 
     def __str__(self):
         # return f"{self.player1} contre {self.player2}"
@@ -41,6 +45,8 @@ class Match:
     @classmethod
     def get(cls, serialized_match):
         deserialized_match = cls.manager.deserialize(serialized_match)
-        instance = cls(deserialized_match['player1'], deserialized_match['player2'])
+        player1 = deserialized_match['match'][0]
+        player2 = deserialized_match['match'][1]
+        instance = cls(player1, player2)
         return instance
 
