@@ -15,10 +15,6 @@ class HomeMenu():
         self.menu_entries[key] = (entries, controller)
         return
 
-    def select_tournament(self):
-        tournament_data = tournament.Tournament.get_tournament_in_db()
-        return f"{tournament_data['tournament_name']} à {tournament_data['place']} du " \
-               f"{tournament_data['start_date']} au {tournament_data['end_date']}"
 
 
     def __repr__(self):

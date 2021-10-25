@@ -11,9 +11,15 @@ class PlayerManager:
         birthday = serialized_player['birthday']
         sexe = serialized_player['sexe']
         ranking = serialized_player['ranking']
-        score = serialized_player['score']
-        return {'first_name': first_name, 'last_name': last_name, 'birthday': birthday, 'sexe': sexe,
-                'ranking': ranking, 'score': score}
+        return {'first_name': first_name, 'last_name': last_name,
+                'birthday': birthday, 'sexe': sexe,
+                'ranking': ranking}
+
+    @classmethod
+    def get_all_from_db(cls):
+        db = TinyDB('db.json')
+        tournament_players = db.table('players')
+        return tournament_players.all()
 
 #     @classmethod
 #     def save(cls):
@@ -25,20 +31,17 @@ class PlayerManager:
 class Player:
     """ Creation of player """
     manager = PlayerManager()
-    def __init__(self, first_name, last_name, birthday, sexe, ranking, score=0):
+    def __init__(self, first_name, last_name, birthday, sexe, ranking):
         self.last_name = last_name
         self.first_name = first_name
         self.birthday = birthday
         self.sexe = sexe
         self.ranking = ranking
         self.tournaments_participation = []
-        self.score = score
+        # self.score = score
 
     def modify_ranking(self, new_ranking):
         self.ranking = new_ranking
-
-    def modify_score(self, new_score):
-        self.score = new_score
 
     def add_tournament(self, tounrnament_name):
         self.tournaments_participation.append(tounrnament_name)
@@ -51,7 +54,6 @@ class Player:
             'birthday': self.birthday,
             'sexe': self.sexe,
             'ranking': self.ranking,
-            'score': self.score
         }
         return self.serialized_player
 
@@ -63,13 +65,15 @@ class Player:
         players_table.insert(serialized_player)
 
     @classmethod
-    def get(cls, serialized_player):
-        deserialized_player = cls.manager.deserialize(serialized_player)
-        instance = cls(**deserialized_player)
-        return instance
+    def get(cls, deserialized_player=""):
+        if not deserialized_player:
+            deserialized_players = cls.manager.get_all_from_db()
+            for item in deserialized_players:
+                deserialized_player = cls.manager.deserialize(item)
+        return cls(**deserialized_player)
 
     def __str__(self):
-        return f"{self.last_name} {self.first_name}: rang({self.ranking}), score({self.score})"
+        return f"{self.last_name} {self.first_name}: rang({self.ranking})"
 
     def __repr__(self):
-        return f"{self.last_name} {self.first_name}: rang({self.ranking}), score({self.score})"
+        return f"{self.last_name} {self.first_name}: rang({self.ranking})"

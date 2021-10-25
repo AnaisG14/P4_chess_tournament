@@ -22,16 +22,9 @@ class Report:
         """ display all the actors of all tournament
         You can sort by name or by score."""
         self.actors = []
-        db = TinyDB('db.json')
-        players_table = db.table("players")
-        serialized_actors = players_table.all()
-        for actor in serialized_actors:
-            first_name = actor['first_name']
-            last_name = actor['last_name']
-            birthday = actor['birthday']
-            sexe = actor['sexe']
-            ranking = int(actor['ranking'])
-            self.actors.append(player.Player(first_name, last_name, birthday, sexe, ranking))
+        deserialized_actors = player.PlayerManager.get_all_from_db()
+        for actor in deserialized_actors:
+            self.actors.append(player.Player.get(actor))
 
         if sort_methode == "name":
             self.actors.sort(key=attrgetter("last_name"))

@@ -19,7 +19,7 @@ class TournamentView:
         print(f"Vous venez de créer le tournoi suivant: \n{description_tournament}")
 
     def display_tournament_in_progress(self, tournaments_in_progress):
-        for key, value in tournaments_in_progress:
+        for key, value in tournaments_in_progress.items():
             print(f"{key}- {value['tournament_name']} à {value['tournament_place']} du "
                   f"{value['start_date']} au {value['end_date']}")
         return input("Entrez le numéro du tournoi que vous souhaitez reprendre :")

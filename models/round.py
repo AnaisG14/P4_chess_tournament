@@ -1,6 +1,6 @@
 from datetime import datetime
 from operator import attrgetter
-from models import round, match, player
+from models import round, match, player, tournament
 
 class RoundManager:
     """ serialize and deserialize players and save them into a tinyDB"""
@@ -8,23 +8,14 @@ class RoundManager:
     @classmethod
     def deserialize(cls, serialized_round):
         round_name = serialized_round['round_name']
-        round_players = serialized_round['round_players']
-        recreate_round_players = []
-        for serialized_player in round_players:
-            deserialized_player = player.PlayerManager.deserialize(serialized_player)
-            recreate_player = player.Player.get(deserialized_player)
-            recreate_round_players.append(recreate_player)
         matches = serialized_round['matches']
         recreate_matches = []
         for serialized_match in matches:
-            deserialized_match = match.MatchManager.deserialize(serialized_match)
-            recreate_match = match.Match.get(deserialized_match)
-            recreate_matches.append(recreate_match)
+            recreate_matches.append(match.Match.get(serialized_match))
 
         datetime_start = serialized_round['datetime_start']
         datetime_end = serialized_round['datetime_end']
-        return {'round_name':round_name,
-                'round_players': recreate_round_players,
+        return {'round_name': round_name,
                 'matches': recreate_matches,
                 'datetime_start': datetime_start,
                 'datetime_end': datetime_end
@@ -40,16 +31,18 @@ class RoundManager:
 class Round:
     """ Model for a round"""
     manager = RoundManager()
-    def __init__(self,tournament, round_name):
-        """ player is an attibut of tournament model"""
+
+    def __init__(self, tournament, round_name, round_players, matches=[], datetime_start=None, datetime_end=""):
         self.tournament = tournament
         self.round_name = round_name
-        self.round_players = tournament.players
-        self.serialized_round_players = []
-        self.matches = []
+        self.round_players = round_players
+        self.matches = matches
         self.serialized_matches = []
-        self.datetime_start = datetime.now()
-        self.datetime_end = ""
+        if datetime_start:
+            self.datetime_start = datetime_start
+        else:
+            self.datetime_start = datetime.now()
+        self.datetime_end = datetime_end
         self.serialized_datetime_start = f"{self.datetime_start}"
         self.serialized_datetime_end = f"{self.datetime_end}"
 
@@ -58,7 +51,7 @@ class Round:
 
     def generate_first_pairs(self):
         # classer les joueurs en fonction de leur rang
-        list_players_sorted = sorted(self.round_players, key=attrgetter("ranking"))
+        list_players_sorted = sorted(self.round_players, key=lambda x: x[0].ranking)
         number_of_pairs = len(self.round_players)/2
         nb = 0
         while nb < number_of_pairs:
@@ -70,8 +63,8 @@ class Round:
     def generate_pairs(self):
         # classer les joueurs en fonction de leur score puis de leur rang
         essais = 0
-        list_players_sorted = sorted(self.round_players, key=attrgetter("score", "ranking"))
-        print(list_players_sorted)
+        list_players_sorted = sorted(self.round_players,
+                                     key=lambda x: (x[1], x[0].ranking))
         while list_players_sorted:
             player1 = list_players_sorted.pop(0)
             player2 = list_players_sorted[0]
@@ -83,7 +76,8 @@ class Round:
                 try:
                     player2 = list_players_sorted.pop(1)
                 except IndexError:
-                    list_players_sorted = sorted(self.round_players, key=attrgetter("score", "ranking"))
+                    list_players_sorted = sorted(self.round_players,
+                                     key=lambda x: (x[1], x[0].ranking))
                     if essais == 0:
                         list_players_sorted[1], list_players_sorted[2] = list_players_sorted[2], list_players_sorted[1]
                     if essais == 1:
@@ -109,6 +103,7 @@ class Round:
                         return "impossible"
         return "ok"
 
+
     def add_end_time(self):
         self.datetime_end = datetime.now()
 
@@ -116,23 +111,18 @@ class Round:
         for match in self.matches:
             serialized_match = match.serialize()
             self.serialized_matches.append(serialized_match)
-        for player in self.round_players:
-            serialized_player = player.serialize()
-            self.serialized_round_players.append(serialized_player)
         self.serialized_round = {
             'round_name': self.round_name,
-            'round_players': self.serialized_round_players,
             'matches': self.serialized_matches,
             'datetime_start': self.serialized_datetime_start,
             'datetime_end': self.serialized_datetime_end,
         }
         return self.serialized_round
 
-
     @classmethod
     def get(cls, serialized_round):
         deserialized_round = cls.manager.deserialize(serialized_round)
-        instance = cls.manager.get(deserialized_round)
+        instance = cls.manager.get(**deserialized_round)
         return instance
 
     def __str__(self):
