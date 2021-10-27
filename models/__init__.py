@@ -1,1 +1,1 @@
-__all__ = ["home_menu_model", "match", "player", "report", "round", "tournament"]
+__all__ = ["home_menu", "match", "player", "lap", "tournament", "connexion_db"]

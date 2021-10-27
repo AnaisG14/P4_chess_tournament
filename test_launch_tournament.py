@@ -3,7 +3,7 @@ from controllers import launch_tournament
 
 information_tournament1 = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
-                          "rounds_number": 4,
+                          "laps_number": 4,
                           "time_controller": "bullet",
                           "manager_description": "test pour un premier tournois",
                           "start_date": "04/10/2021",

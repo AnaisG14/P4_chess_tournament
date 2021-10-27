@@ -1,10 +1,11 @@
-from models import player, round
+from models import player
 from views import player_view
 from controllers import launch_tournament, home_menu_controller
 from utils import verify_response
 
+
 class AddPlayers:
-    """ Add players in a tournament"""
+    """ Add players in the tournament passed in parameter or in the database if no tournament passed."""
 
     def __init__(self, tournament=None):
         self.tournament = tournament
@@ -20,14 +21,13 @@ class AddPlayers:
             answer = None
             while not answer:
                 response = self.view_get_information_player.ask_questions("Combien voulez-vous inscrire "
-                                                                      "de personnes ?")
+                                                                          "de personnes ?")
                 try:
                     answer = int(response)
                 except ValueError:
                     self.view_get_information_player.display_informations("Vous devez entrez un nombre")
                 else:
                     self.number_player_to_add = int(response)
-
 
         # add questions to the view to create the player
         self.view_get_information_player.add_questions("Nom du joueur:\n", "last_name", "required")
@@ -37,7 +37,7 @@ class AddPlayers:
         self.view_get_information_player.add_questions("Rang du joueur:\n", "ranking", int)
 
         while self.number_player_to_add:
-        # ask question to manager
+            # ask question to manager
             self.view_get_information_player.display_informations(f"Entrez les informations du joueur "
                                                                   f"{self.number_player_to_add}")
             self.add_player_index()
@@ -63,10 +63,13 @@ class AddPlayers:
             return home_menu_controller.HomeMenuController()
 
     def add_player_index(self):
+        """ Add an index for each player added. """
         self.view_get_information_player.responses["index"] = self.player_index
         self.player_index += 1
 
     def test_new_player(self, new_player):
+        """ Verification if the player exists in the database. If the player exists, modification of
+        his ranking."""
         last_names_players = []
         first_names_players = []
         birthday_players = []
@@ -74,9 +77,8 @@ class AddPlayers:
             last_names_players.append(item.last_name)
             first_names_players.append(item.first_name)
             birthday_players.append(item.birthday)
-        if new_player.last_name in last_names_players and new_player.first_name in first_names_players and new_player.birthday in birthday_players:
+        if new_player.last_name in last_names_players and new_player.first_name in first_names_players and \
+                new_player.birthday in birthday_players:
             new_player.modify_ranking(new_player.ranking)
         else:
             new_player.save()
-
-

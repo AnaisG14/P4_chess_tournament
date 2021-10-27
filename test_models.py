@@ -1,10 +1,10 @@
 from models import tournament, player,\
-    round, match, report
+    lap, match, report
 
 # test tournament
 information_tournament1 = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
-                          "rounds_number": 4,
+                          "laps_number": 4,
                           "time_controller": "bullet",
                           "manager_description": "test pour un premier tournois",
                           "start_date": "04/10/2021",
@@ -12,7 +12,7 @@ information_tournament1 = {"tournament_name": "Tournois test",
                           }
 information_tournament2 = {"tournament_name": "Autre tournois test",
                           "tournament_place": "Paris",
-                          "rounds_number": 3,
+                          "laps_number": 3,
                           "time_controller": "blizt",
                           "manager_description": "deuxième tournoi",
                           "start_date": "04/11/2021",
@@ -107,15 +107,15 @@ tournois2.add_players(Anais)
 for player in tournois2.players:
     print(player)
 
-print("créer un round")
-round1 = round.Round(tournois1, "round1")
-tournois1.add_rounds(round1)
-for player in round1.round_players:
+print("créer un lap")
+lap1 = lap.lap(tournois1, "lap1")
+tournois1.add_laps(lap1)
+for player in lap1.lap_players:
     print(player)
 
 print("creation des matches")
-round1.generate_first_pairs()
-print(round1)
+lap1.generate_first_pairs()
+print(lap1)
 
 print("enregistrement des scores")
 print(f"Dupont gagne contre Adam")
@@ -128,14 +128,14 @@ Fred.modify_score(Fred.score + 0.5)
 Guillaume.modifiy_score(Guillaume.score + 0.5)
 print(f"Sno gagne contre Laure")
 Jeremi.modify_score(Jeremi.score + 1)
-round1.add_end_time()
-print(f"round1 terminé à {round1.datetime_end}")
-print("nouveau round")
-round2 = round.Round(tournois1,"Round2")
-tournois1.add_rounds(round2)
+lap1.add_end_time()
+print(f"lap1 terminé à {lap1.datetime_end}")
+print("nouveau lap")
+lap2 = lap.lap(tournois1,"lap2")
+tournois1.add_laps(lap2)
 print("relance des matches")
-round2.generate_pairs()
-print(round2.matches)
+lap2.generate_pairs()
+print(lap2.matches)
 
 print("tournois1")
 print(tournois1)
@@ -163,10 +163,10 @@ print(f"liste des tournois")
 list_tournament = rapport1.list_tournament()
 for tournament in list_tournament:
     print(tournament)
-print(f"liste des rounds du tournois1")
-rounds = rapport1.list_rounds(tournois1)
-for round in rounds:
-    print(round)
+print(f"liste des laps du tournois1")
+laps = rapport1.list_laps(tournois1)
+for lap in laps:
+    print(lap)
 print(f"liste des matches du tournois1")
 matches = rapport1.list_matches(tournois1)
 for match in matches:

@@ -3,37 +3,39 @@ from views import tournament_view
 from controllers import add_players, home_menu_controller
 from utils import verify_response
 
+
 class CreateTournament:
-    """ Create tournament with user informations"""
+    """ Ask questions to the manager. Use these informations to create a tournament. """
+
     def __init__(self):
         self.tournament_view = tournament_view.TournamentView()
         self.attribut_tournament = {}
         self.new_tournament = None
 
     def __call__(self):
-        """ Add quesions to the model and ask questions to the user"""
+        """ Add questions to the model and ask questions to the user"""
         # add questions to create tournament
         self.tournament_view.add_questions("Donnez un nom au tournois à créer:\n",
-                                                   "tournament_name",
-                                                   "required")
+                                           "tournament_name",
+                                           "required")
         self.tournament_view.add_questions("Indiquez le lieu de votre tournois:\n",
-                                                   "tournament_place",
-                                                   "required")
-        self.tournament_view.add_questions("Indiquez le nombre de rounds (par défaut 4):\n",
-                                                   "rounds_number",
-                                                   int,
-                                                   4)
+                                           "tournament_place",
+                                           "required")
+        self.tournament_view.add_questions("Indiquez le nombre de tours (par défaut 4):\n",
+                                           "laps_number",
+                                           int,
+                                           4)
         self.tournament_view.add_questions("Quel sera le contrôleur de temps (bullet, blitz, coup rapide):\n",
-                                                   "time_controller",
-                                                   ['bullet', 'blitz', 'coup rapide'])
+                                           "time_controller",
+                                           ['bullet', 'blitz', 'coup rapide'])
         self.tournament_view.add_questions("Description du tournois facultatif:\n",
-                                                   "manager_description")
+                                           "manager_description")
         self.tournament_view.add_questions("Date de début (dd-mm-aaaa):\n",
-                                                   "start_date",
-                                                   "date")
+                                           "start_date",
+                                           "date")
         self.tournament_view.add_questions("Date de fin (dd-mm-aaaa):\n",
-                                                   "end_date",
-                                                   "date")
+                                           "end_date",
+                                           "date")
 
         # ask question to manager
         for question in self.tournament_view.questions:
@@ -43,7 +45,7 @@ class CreateTournament:
                 if not response:
                     response = question[3]
                 test_response = verify_response.verify_response(question, response)
-                if test_response == True:
+                if test_response:
                     self.verification = True
                     self.attribut_tournament[question[1]] = response
                 else:
@@ -53,14 +55,10 @@ class CreateTournament:
         response = ""
         autorized_response = ["o", "n", "O", "N"]
         while response not in autorized_response:
-            response = self.tournament_view.ask_questions(("Répondez par o ou n.\nSouhaitez-vous ajouter vos joueurs maintenant ? (o/n)"))
+            response = self.tournament_view.ask_questions("Répondez par o ou n.\n"
+                                                          "Souhaitez-vous ajouter vos joueurs maintenant ? (o/n)")
         if response == "o" or response == "O":
             return add_players.AddPlayers(self.new_tournament)
         else:
             self.new_tournament.save()
             return home_menu_controller.HomeMenuController()
-
-
-
-
-

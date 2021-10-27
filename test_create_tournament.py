@@ -4,8 +4,8 @@ from controllers import create_tournament
 """
 information_tournament = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
-                          "rounds_number": 4,
-                          "rounds_list": ["round1", "round2", "round3"],
+                          "laps_number": 4,
+                          "laps_list": ["lap1", "lap2", "lap3"],
                           "players_index" : [1, 2, 3, 4, 5, 6, 7, 8],
                           "time_controller": "bullet",
                           "manager_description": "test pour un premier tournois",

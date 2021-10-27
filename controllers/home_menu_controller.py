@@ -2,22 +2,25 @@ from models import home_menu
 from views import home_menu_view
 from controllers import create_tournament, add_players, report_actors, report_tournaments, management_tournament
 
+
 class HomeMenuController:
-    """ Display HomeMenu, ask a choice to the user and return a controller"""
+    """ Add items in the home menu and return the controller corresponding to the user choice."""
     def __init__(self):
         self.home_menu = home_menu.HomeMenu()
         self.menu_view = home_menu_view.HomeMenuView(self.home_menu)
 
     def __call__(self):
         self.home_menu.add_item("auto", "Créer un tournoi", create_tournament.CreateTournament())
-        self.home_menu.add_item("auto", "Poursuivre un tournoi sauvegardé", management_tournament.ManagementTournament())
+        self.home_menu.add_item("auto", "Poursuivre un tournoi sauvegardé",
+                                management_tournament.ManagementTournament())
         self.home_menu.add_item("auto", "Gérer les joueurs", SubMenuPlayer())
         self.home_menu.add_item("auto", "Afficher les rapports", SubMenuTournament())
         self.home_menu.add_item("auto", "Quitter")
         return self.menu_view.user_choice()
 
+
 class SubMenuPlayer(HomeMenuController):
-    """ Add choice for the user and ask choice."""
+    """ Add items in the submenu and return the controller corresponding to the user choice."""
     def __init__(self):
         super().__init__()
         self.sub_menu_player = home_menu.HomeMenu()
@@ -39,12 +42,11 @@ class SubMenuTournament(HomeMenuController):
         self.sub_menu_view = home_menu_view.HomeMenuView(self.sub_menu_tournament)
 
     def __call__(self):
-        self.sub_menu_tournament.add_item("auto", "Afficher la liste des tournois", report_tournaments.ReportTournament())
-        self.sub_menu_tournament.add_item("auto", "Afficher la liste des rounds d'un tournoi",
-                                report_tournaments.ReportTournament("rounds"))
+        self.sub_menu_tournament.add_item("auto", "Afficher la liste des tournois",
+                                          report_tournaments.ReportTournament())
+        self.sub_menu_tournament.add_item("auto", "Afficher la liste des tours d'un tournoi",
+                                          report_tournaments.ReportTournament("laps"))
         self.sub_menu_tournament.add_item("auto", "Afficher la liste des matches d'un tournoi",
                                           report_tournaments.ReportTournament("matches"))
         self.sub_menu_tournament.add_item("auto", "Retour au menu principal", HomeMenuController())
         return self.sub_menu_view.user_choice()
-
-

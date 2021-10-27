@@ -1,4 +1,5 @@
-from models import round, player
+from models import player
+
 
 class MatchManager:
     """ serialize and deserialize players and save them into a tinyDB"""
@@ -9,14 +10,15 @@ class MatchManager:
         serialized_player2 = serialized_match['opponents'][1]
         winner = serialized_match['winner']
         return {'opponents': [[player.Player.get(serialized_player1[0]), serialized_player1[1]],
-                          [player.Player.get(serialized_player2[0]), serialized_player2[1]]],
+                              [player.Player.get(serialized_player2[0]), serialized_player2[1]]],
                 'winner': winner
                 }
 
 
 class Match:
-    """ Instance of match"""
+    """ Create an instance of match. """
     manager = MatchManager()
+
     def __init__(self, player1, player2, winner=""):
         """ player1 = [player, score]"""
         # self.player1 = player1
@@ -28,6 +30,7 @@ class Match:
             self.winner = None
 
     def modify_score(self, score):
+        """ Modify the score of the players. """
         self.opponents[0][1] += float(score)
         self.opponents[1][1] += 1 - float(score)
         if float(score) == 1:
@@ -51,20 +54,21 @@ class Match:
             return f"{self.opponents[0]} contre {self.opponents[1]}"
 
     def serialize(self):
+        """ Serialized the match in order to save it. """
         serialized_player1 = self.opponents[0][0].serialize()
         serialized_player2 = self.opponents[1][0].serialize()
-        self.serialized_match = {
+        serialized_match = {
             'opponents': [[serialized_player1, self.opponents[0][1]], [serialized_player2, self.opponents[1][1]]],
             'winner': self.winner
                       }
-        return self.serialized_match
+        return serialized_match
 
     @classmethod
     def get(cls, serialized_match):
+        """ Recreate an instance of match whith deserialized data. """
         deserialized_match = cls.manager.deserialize(serialized_match)
         player1 = deserialized_match['opponents'][0]
         player2 = deserialized_match['opponents'][1]
         winner = deserialized_match['winner']
         instance = cls(player1, player2, winner)
         return instance
-

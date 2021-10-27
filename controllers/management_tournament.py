@@ -2,8 +2,11 @@ from models import tournament, player
 from views import home_menu_view
 from controllers import launch_tournament, add_players
 
+
 class ManagementTournament:
-    """ affichage des éléments des tournois"""
+    """ Get informations of tournaments and players in the database and recreate objects of
+    tournament class and player class.
+    """
 
     def __init__(self):
         self.all_tournaments = tournament.TournamentManager.get_all()
@@ -12,6 +15,7 @@ class ManagementTournament:
         self.key = 1
 
     def selecte_tournament(self):
+        """ Put in a list all the instance of tournaments. """
         tournament_entries = {}
         keys = []
         for tournament in self.all_tournaments:
@@ -29,6 +33,7 @@ class ManagementTournament:
                 return tournament_entries[response]
 
     def get_tournament_in_progress(self):
+        """ Get in a list all the instances of tournaments in progress. """
         tournament_in_progress = {}
         keys = []
         key = 1
@@ -50,13 +55,9 @@ class ManagementTournament:
                 tournament.TournamentManager.save_all(self.all_tournaments)
                 return tournament_get
 
-
     def __call__(self):
         tournament_in_progress = self.get_tournament_in_progress()
         if tournament_in_progress.players:
             return launch_tournament.LaunchTournament(tournament_in_progress)
         else:
             return add_players.AddPlayers(tournament_in_progress)
-
-
-

@@ -8,19 +8,26 @@ class PlayerView:
     def add_questions(self, question, question_variable, verify_question=""):
         """ Add questions to the manager to create a player.
          Each question must contain the question, the variable name to save the question
-         in a dictionnary, the default_value and the test to verify the question"""
+         in a dictionary, the default_value and the test to verify the question"""
         self.questions.append((question, question_variable, verify_question))
 
-    def ask_questions(self, question):
+    @staticmethod
+    def ask_questions(question):
+        """ Ask questions to the manager in order to create a player. """
         return input(question)
 
-    def display_informations(self, text):
+    @staticmethod
+    def display_informations(text):
+        """ Display informations to the manager. """
         print(text)
 
-    def display_informations_player(self):
+    @staticmethod
+    def display_informations_player():
+        """ Display informations about a player. """
         print("Le joueur a été ajouté")
 
-    def display_actors(self, actors):
+    @staticmethod
+    def display_actors(actors):
+        """ Display a list of all actors in the database. """
         for actor in actors:
             print(f"{actor.last_name} {actor.first_name} né(e) le {actor.birthday} (rang: {actor.ranking}.")
-

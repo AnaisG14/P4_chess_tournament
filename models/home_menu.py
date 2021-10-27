@@ -1,4 +1,4 @@
-class HomeMenu():
+class HomeMenu:
     """ Model for the home menu """
 
     def __init__(self):
@@ -15,9 +15,3 @@ class HomeMenu():
 
     def __repr__(self):
         return f"{self.menu_entries}"
-
-
-
-
-
-
