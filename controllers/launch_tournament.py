@@ -51,14 +51,14 @@ class LaunchTournament:
 
     def add_score(self, lap):
         """ Ask manager to enter score at the end of a match and update the player score. """
-        for match in lap.matches:
+        for each_match in lap.matches:
             verification = False
             while not verification:
-                score = self.laps_view.ask_question(f"Score de {match.opponents[0][0]}")
+                score = self.laps_view.ask_question(f"Score de {each_match.opponents[0][0]}")
                 test_score = verify_response.check_float(score)
                 if test_score:
                     verification = True
-                    match.modify_score(score)
+                    each_match.modify_score(score)
                 else:
                     print(test_score)
         self.laps_view.display_score(lap.matches)
@@ -123,10 +123,10 @@ class LaunchTournament:
 
     def verify_pairs(self, player1, player2):
         """ Verify that opponents have never play against each other. """
-        for lap in self.tournament.laps:
-            for match in lap.matches:
-                if player1 in match.opponents:
-                    if player2 in match.opponents:
+        for each_lap in self.tournament.laps:
+            for each_match in each_lap.matches:
+                if player1 in each_match.opponents:
+                    if player2 in each_match.opponents:
                         return "impossible"
         return True
 

@@ -58,8 +58,8 @@ class Lap:
 
     def serialize(self):
         """ Serialize a match in order to save it. """
-        for match in self.matches:
-            serialized_match = match.serialize()
+        for each_match in self.matches:
+            serialized_match = each_match.serialize()
             self.serialized_matches.append(serialized_match)
         serialized_lap = {
             'lap_name': self.lap_name,

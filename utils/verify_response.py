@@ -56,6 +56,6 @@ def check_float(number_to_test):
     try:
         float(number_to_test)
     except ValueError:
-        return f"Vous devez entrer un nombre."
+        return "Vous devez entrer un nombre."
     else:
         return True

@@ -18,8 +18,8 @@ class ManagementTournament:
         """ Put in a list all the instance of tournaments. """
         tournament_entries = {}
         keys = []
-        for tournament in self.all_tournaments:
-            tournament_entries[self.key] = tournament
+        for each_tournament in self.all_tournaments:
+            tournament_entries[self.key] = each_tournament
             keys.append(self.key)
             self.key += 1
         response = ""

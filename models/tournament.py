@@ -139,20 +139,20 @@ class Tournament:
 
     def __str__(self):
         display_tournament = f"Nom du tournoi :{self.tournament_name}\n laps\n"
-        for lap in self.laps_name:
-            display_tournament += f"{lap}; "
+        for each_lap in self.laps_name:
+            display_tournament += f"{each_lap}; "
         display_tournament += "Joueurs\n"
-        for player in self.players:
-            display_tournament += f"{player}; "
+        for each_player in self.players:
+            display_tournament += f"{each_player}; "
         return display_tournament
 
     def __repr__(self):
         display_tournament = f"Nom du tournoi :{self.tournament_name}\n laps\n"
-        for lap in self.laps_name:
-            display_tournament += f"{lap}; "
+        for each_lap in self.laps_name:
+            display_tournament += f"{each_lap}; "
         display_tournament += "Joueurs\n"
-        for player in self.players:
-            display_tournament += f"{player}; "
+        for each_player in self.players:
+            display_tournament += f"{each_player}; "
         return display_tournament
 
     def add_players(self, player):

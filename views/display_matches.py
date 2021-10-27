@@ -14,14 +14,14 @@ class DisplayMatches:
     @staticmethod
     def display_score(matches):
         """ Display the scores at the end of a lap. """
-        print(f"Voici les scores à la fin de ce tour")
+        print("Voici les scores à la fin de ce tour")
         for match in matches:
             print(f"{match}")
 
     @staticmethod
     def display_matches(matches):
         """ Display the matches for the next lap. """
-        print(f"Voici les matches pour ce tour")
+        print("Voici les matches pour ce tour")
         nb = 1
         for match in matches:
             print(f"Match {nb}: {match}")

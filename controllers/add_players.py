@@ -32,7 +32,8 @@ class AddPlayers:
         # add questions to the view to create the player
         self.view_get_information_player.add_questions("Nom du joueur:\n", "last_name", "required")
         self.view_get_information_player.add_questions("prénom du joueur:\n", "first_name", "required")
-        self.view_get_information_player.add_questions("Date de naisance du joueur (jj-mm-aaaa):\n", "birthday", "date")
+        self.view_get_information_player.add_questions("Date de naisance du joueur (jj-mm-aaaa):\n",
+                                                       "birthday", "date")
         self.view_get_information_player.add_questions("Sexe du joueur (M/F):\n", "sexe", ['M', 'F'])
         self.view_get_information_player.add_questions("Rang du joueur:\n", "ranking", int)
 
