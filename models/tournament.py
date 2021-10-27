@@ -1,6 +1,6 @@
 from tinydb import TinyDB
 from models import round, player
-from utils import connexion_db
+from models import connexion_db
 
 class TournamentManager:
     """ serialize and deserialize players and save them into a tinyDB"""
@@ -44,13 +44,35 @@ class TournamentManager:
                                              'rounds_name': rounds_name,
                                              'rounds': rounds,
                                              'players': players,
+                                             'players_scores': players_scores,
                                              'results': results
                                              }
         return informations_to_create_tournament
 
     @classmethod
-    def get_all_from_db(cls):
-        return cls.manage_db.get('tournaments')
+    def get_all(cls):
+        all_tournaments = []
+        results_db = cls.manage_db.get('tournaments')
+        for result in results_db:
+            deserialized_tournament = cls.deserialize(result)
+            all_tournaments.append(Tournament(**deserialized_tournament))
+        return all_tournaments
+
+    @classmethod
+    def get_one(cls, serialized_tournament):
+        deserialized_tournament = cls.deserialize(serialized_tournament)
+        return Tournament(**deserialized_tournament)
+
+    @classmethod
+    def save_all(cls, tournaments):
+        cls.manage_db.clear_tournaments()
+        for tournament in tournaments:
+            cls.manage_db.save('tournaments', tournament.serialize())
+
+    @classmethod
+    def save_one(cls, serialized_tournament):
+        cls.manage_db.save('tournaments', serialized_tournament)
+
 
 class Tournament:
     """ Model of tournament"""
@@ -65,10 +87,7 @@ class Tournament:
         self.time_controller = time_controller
         self.manager_description = manager_description
         self.start_date = start_date
-        self.serialized_start_date = f"{self.start_date}"
         self.end_date = end_date
-        self.serialized_end_date = f"{self.end_date}"
-        self.date = (start_date, end_date)
         if rounds_name:
             self.rounds_name = rounds_name
         else:
@@ -77,12 +96,16 @@ class Tournament:
             self.rounds = rounds
         else:
             self.rounds = []
-        self.serialized_rounds = []
         self.players = players
-        self.serialized_players = []
         self.players_scores = players_scores
-        self.serialized_players_scores = []
         self.results = results
+
+        self.serialized_start_date = f"{self.start_date}"
+        self.serialized_end_date = f"{self.end_date}"
+        self.date = (start_date, end_date)
+        self.serialized_rounds = []
+        self.serialized_players = []
+        self.serialized_players_scores = []
         self.serialized_results = []
         self.save_tournament = connexion_db.ManagementDB()
 
@@ -152,28 +175,16 @@ class Tournament:
         return serialized_tournament
 
     def save(self):
-        serialized_tournament = self.serialize()
-        self.save_tournament.save('tournaments', serialized_tournament)
+        self.manager.save_one(self.serialize())
 
     @classmethod
-    def get_tournament_in_progress(cls):
-        tournament_data = cls.manager.get_all_from_db()
-        tournament_in_progress = {}
-        key = 1
-        for tournament in tournament_data:
-            if not tournament['results']:
-                tournament_in_progress[key] = tournament
-                key += 1
-        return tournament_in_progress
+    def get_one(cls, serialized_tournament):
+        return cls.manager.get_one(serialized_tournament)
 
     @classmethod
-    def get(cls):
-        tournaments = []
-        results_db = cls.manager.get_all_from_db()
-        for item in results_db:
-            deserialized_tournament = cls.manager.deserialize(item)
-            tournaments.append(cls(**deserialized_tournament))
-        return tournaments
+    def get_all(cls):
+        return cls.manager.get_all()
+
 
 
 

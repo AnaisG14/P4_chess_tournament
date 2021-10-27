@@ -1,43 +1,40 @@
 from models import round, tournament, match
 from views import display_matches, tournament_view
+from controllers import management_tournament, home_menu_controller
+from utils import verify_response
 
 class LaunchTournament:
     """ Générer les paires de joueurs"""
-    def __init__(self, tournament_instance=""):
+    def __init__(self, tournament_instance):
         self.tournament_view = tournament_view.TournamentView()
-        if tournament_instance:
-            self.tournament = tournament_instance
-        else:
-            self.tournament = tournament.Tournament.get(self.get_tournament_in_progress())
-        # self.rounds_name = self.tournament.rounds_name
+        self.tournament = tournament_instance
         self.rounds_view = display_matches.DisplayMatches()
+        self.manage_tournament = management_tournament.ManagementTournament()
+        self.quitter = False
 
     def __call__(self):
-        while len(self.tournament.rounds) < int(self.tournament.rounds_number):
-            if not self.tournament.rounds:
-                self.wait_response("lancer le premier round.")
-                self.generate_first_round()
-            players_score = self.tournament.players_scores
-            self.generate_rounds(f"Round {self.tournament.rounds_name[len(self.tournament.rounds)]}", players_score)
-        self.tournament.results = self.tournament.players_scores
-        display_results = self.tournament.display_results()
-        self.rounds_view.display_classement(display_results)
-
-    def get_tournament_in_progress(self):
-        tournament_data = tournament.Tournament.get_tournament_in_progress()
-        choice = self.tournament_view.display_tournament_in_progress(tournament_data)
-        return tournament_data[int(choice)]
-        # if int(choice) in range(len(tournament_data)):
-        #     return tournament_data[choice]
-        # else:
-        #     print("entrez un choix valide")
+        while not self.quitter:
+            if len(self.tournament.rounds) < int(self.tournament.rounds_number):
+                if not self.tournament.rounds:
+                    self.wait_response("lancer le premier round.")
+                    self.generate_first_round()
+                else:
+                    self.generate_rounds(f"Round {self.tournament.rounds_name[len(self.tournament.rounds)]}")
+                    self.wait_response("lancer le round suivant.")
+            else:
+                self.tournament.results = self.tournament.players_scores
+                self.tournament.save()
+                display_results = self.tournament.display_results()
+                self.rounds_view.display_classement(display_results)
+                self.wait_response("une autre touche vous affichera de nouveau les résultats")
+        return home_menu_controller.HomeMenuController()
 
     def generate_first_round(self):
         self.tournament.players_scores = [[player, 0] for player in self.tournament.players]
         new_round = round.Round(self.tournament.rounds_name[0])
         self.generate_first_pairs(new_round, self.tournament.players_scores)
         self.rounds_view.display_matches(new_round.matches)
-        self.wait_response("entrer les scores")
+        self.rounds_view.display_information("Entrez les scores pour chaque premier joueur du match")
         new_round.add_end_time()
         self.add_score(new_round)
         self.tournament.add_rounds(new_round)
@@ -46,8 +43,8 @@ class LaunchTournament:
         for match in round.matches:
             verification = False
             while not verification:
-                score = self.rounds_view.ask_question(f"Score de {match.match[0][0]}")
-                test_score = self.verify_score(score)
+                score = self.rounds_view.ask_question(f"Score de {match.opponents[0][0]}")
+                test_score = verify_response.check_float(score)
                 if test_score == True:
                     verification = True
                     match.modify_score(score)
@@ -55,27 +52,16 @@ class LaunchTournament:
                     print(test_score)
         self.rounds_view.display_score(round.matches)
 
-    def verify_score(self, score_to_test):
-        try:
-            float(score_to_test)
-        except ValueError:
-            return f"vous devez entrer un nombre"
-        else:
-            return True
-
-    def generate_rounds(self, round_name, round_players):
+    def generate_rounds(self, round_name):
         new_round = round.Round(round_name)
         new_round.matches = []
-        self.wait_response("lancer le round suivant.")
-        self.generate_pairs(new_round, round_players)
+        self.generate_pairs(new_round, self.tournament.players_scores)
         self.rounds_view.display_matches(new_round.matches)
-        self.wait_response("entrer les scores")
+        self.rounds_view.display_information("Entrez les scores pour chaque premier joueur du match")
         new_round.add_end_time()
         self.add_score(new_round)
         self.tournament.add_rounds(new_round)
 
-        # self.wait_response("Enregistrer")
-        # self.tournament.save_tournament()
 
     def generate_first_pairs(self, round, players_with_score):
         # classer les joueurs en fonction de leur rang
@@ -97,7 +83,7 @@ class LaunchTournament:
             player1 = list_players_sorted.pop(0)
             player2 = list_players_sorted[0]
             test_pair = self.verify_pairs(player1, player2)
-            if test_pair == "ok":
+            if test_pair:
                 player2 = list_players_sorted.pop(0)
                 round.add_match(match.Match(player1, player2))
             else:
@@ -126,18 +112,19 @@ class LaunchTournament:
     def verify_pairs(self, player1, player2):
         for round in self.tournament.rounds:
             for match in round.matches:
-                if player1 in match.match:
-                    if player2 in match.match:
+                if player1 in match.opponents:
+                    if player2 in match.opponents:
                         return "impossible"
-        return "ok"
+        return True
 
 
     def wait_response(self, question):
-        response = self.rounds_view.ask_question(f"Tapez 'q' pour quitter ou 'entrez' pour {question}")
+        response = self.rounds_view.ask_question(f"Tapez 'q' pour retourner au menu principal ou n'importe quelle touche pour {question}")
         if response == "q":
-            exit()
+            self.tournament.save()
+            self.quitter = True
         else:
-            return
+            self.quitter = False
 
 
 

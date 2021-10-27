@@ -10,8 +10,6 @@ class HomeMenu():
         if key == "auto":
             key = str(self.auto_key)
             self.auto_key += 1
-        else:
-            controller = ""
         self.menu_entries[key] = (entries, controller)
         return
 

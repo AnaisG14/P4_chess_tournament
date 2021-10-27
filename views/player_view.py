@@ -18,9 +18,9 @@ class PlayerView:
         print(text)
 
     def display_informations_player(self):
-        print("Le joueur suivant a été ajouté")
-        for value in self.responses.values():
-            print(f"{value}\n")
+        print("Le joueur a été ajouté")
 
-
+    def display_actors(self, actors):
+        for actor in actors:
+            print(f"{actor.last_name} {actor.first_name} né(e) le {actor.birthday} (rang: {actor.ranking}.")
 

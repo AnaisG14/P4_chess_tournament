@@ -1,6 +1,7 @@
-from models import tournament, player, round, match, management_tournament
+from models import tournament, player, round, match, connexion_db
 from controllers import launch_tournament
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
+
 
 information_tournament1 = {"tournament_name": "Tournois paris",
                           "tournament_place": "paris",
@@ -115,15 +116,19 @@ print(f"ajout d'un joueur {tournois1.players}")
 # # s_match = match_test.serialize()
 # # print(s_match)
 #
-# db = TinyDB('db.json')
-# tournaments_table = db.table('tournaments')
-# tournaments_players = db.table('players')
+db = TinyDB('db.json')
+tournaments_table = db.table('tournaments')
+tournaments_players = db.table('players')
+
+print("modif du rang de Anais")
+User = Query
+self.players_table.update({'ranking': ranking}), (User.last_name == last_name) and (User.first_name == first_name)
 # tournois = tournaments_table.all()
 # print(len(tournois))
-
-test = management_tournament.ManagementTournament()
-for tournament in test.all_tournaments:
-    print(type(tournament))
+#
+# test = management_tournament.ManagementTournament()
+# for tournament in test.all_tournaments:
+#     print(type(tournament))
 # tournaments_table.truncate()
 # tournaments_players.truncate()
 # tournaments_table.insert(s_tournois1)
@@ -135,7 +140,7 @@ for tournament in test.all_tournaments:
 #     new_player = player.Player.get(deserialized_player)
 #     print(new_player, end="")
 
-# tournois1.save_tournament()
+# tournois1.save()
 
 # recreate_tournament = tournament.Tournament.get()
 # print("\n",recreate_tournament.tournament_name)

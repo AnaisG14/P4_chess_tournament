@@ -1,4 +1,4 @@
-from tinydb import TinyDB
+from tinydb import TinyDB, Query, where
 
 class ManagementDB:
     """ to create, save or get on tiny_db"""
@@ -6,6 +6,7 @@ class ManagementDB:
         self.db = TinyDB('db.json')
         self.tournaments_table = self.db.table('tournaments')
         self.players_table = self.db.table('players')
+
 
     def get(self, table):
         if table == "tournaments":
@@ -18,6 +19,16 @@ class ManagementDB:
             self.tournaments_table.insert(to_save)
         elif table == "players":
             self.players_table.insert(to_save)
+
+    def clear_tournaments(self):
+        self.tournaments_table.truncate()
+
+    def modifiy_player_ranking(self, last_name, first_name, birthday, ranking):
+        User = Query()
+        self.players_table.update({'ranking': ranking}, (User.last_name == last_name) and (User.first_name == first_name))
+
+
+
 
 
 

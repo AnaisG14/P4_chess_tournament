@@ -1,6 +1,6 @@
 from models import tournament
 from views import tournament_view
-from controllers import add_players
+from controllers import add_players, home_menu_controller
 from utils import verify_response
 
 class CreateTournament:
@@ -11,9 +11,8 @@ class CreateTournament:
         self.new_tournament = None
 
     def __call__(self):
-        print("création du tournoi")
-
-        # save questions
+        """ Add quesions to the model and ask questions to the user"""
+        # add questions to create tournament
         self.tournament_view.add_questions("Donnez un nom au tournois à créer:\n",
                                                    "tournament_name",
                                                    "required")
@@ -51,7 +50,17 @@ class CreateTournament:
                     print(test_response)
         self.new_tournament = tournament.Tournament(**self.attribut_tournament)
         self.tournament_view.display_responses(self.new_tournament)
-        return add_players.AddPlayers(self.new_tournament)
+        response = ""
+        autorized_response = ["o", "n", "O", "N"]
+        while response not in autorized_response:
+            response = self.tournament_view.ask_questions(("Répondez par o ou n.\nSouhaitez-vous ajouter vos joueurs maintenant ? (o/n)"))
+        if response == "o" or response == "O":
+            return add_players.AddPlayers(self.new_tournament)
+        else:
+            self.new_tournament.save()
+            return home_menu_controller.HomeMenuController()
+
+
 
 
 

@@ -40,8 +40,9 @@ class Round:
         else:
             self.datetime_start = datetime.now()
         self.datetime_end = datetime_end
-        self.serialized_datetime_start = f"{self.datetime_start}"
-        self.serialized_datetime_end = f"{self.datetime_end}"
+        self.serialized_datetime_start = str(self.datetime_start)
+        self.serialized_datetime_end = str(self.datetime_end)
+
 
     def add_match(self, match):
         self.matches.append(match)

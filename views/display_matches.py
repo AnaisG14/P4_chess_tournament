@@ -27,3 +27,6 @@ class DisplayMatches:
     def ask_question(self, question):
         response = input(question)
         return response
+
+    def display_information(self, information):
+        print(information)
