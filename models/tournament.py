@@ -21,7 +21,7 @@ class TournamentManager:
         deserialized_laps = serialized_tournament['laps']
         deserialized_results = serialized_tournament['results']
         for serialized_lap in deserialized_laps:
-            laps.append(lap.lap.get(serialized_lap))
+            laps.append(lap.Lap.get(serialized_lap))
         players = []
         deserialized_players = serialized_tournament['players']
         for serialized_player in deserialized_players:
@@ -101,9 +101,18 @@ class Tournament:
             self.laps = laps
         else:
             self.laps = []
-        self.players = players
-        self.players_scores = players_scores
-        self.results = results
+        if players:
+            self.players = players
+        else:
+            self.players = []
+        if players_scores:
+            self.players_scores = players_scores
+        else:
+            self.players_scores = []
+        if results:
+            self.results = results
+        else:
+            self.results = []
 
         self.serialized_start_date = f"{self.start_date}"
         self.serialized_end_date = f"{self.end_date}"

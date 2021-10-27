@@ -41,7 +41,7 @@ class LaunchTournament:
         Wait for the scores and update the scores.
         """
         self.tournament.players_scores = [[player, 0] for player in self.tournament.players]
-        new_lap = lap.lap(self.tournament.laps_name[0])
+        new_lap = lap.Lap(self.tournament.laps_name[0])
         self.generate_first_pairs(new_lap)
         self.laps_view.display_matches(new_lap.matches)
         self.laps_view.display_information("Entrez les scores pour chaque premier joueur du match")
@@ -65,7 +65,7 @@ class LaunchTournament:
 
     def generate_laps(self, lap_name):
         """ Generate laps after the first lap. """
-        new_lap = lap.lap(lap_name)
+        new_lap = lap.Lap(lap_name)
         new_lap.matches = []
         self.generate_pairs(new_lap, self.tournament.players_scores)
         self.laps_view.display_matches(new_lap.matches)

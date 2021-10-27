@@ -35,7 +35,10 @@ class Lap:
 
     def __init__(self, lap_name, matches=None, datetime_start=None, datetime_end=""):
         self.lap_name = lap_name
-        self.matches = matches
+        if matches:
+            self.matches = matches
+        else:
+            self.matches = []
         self.serialized_matches = []
         if datetime_start:
             self.datetime_start = datetime_start
