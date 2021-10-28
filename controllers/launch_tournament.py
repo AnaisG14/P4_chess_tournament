@@ -1,6 +1,6 @@
 from models import lap, match
 from views import display_matches, tournament_view
-from controllers import management_tournament, home_menu_controller
+from controllers import management_tournament, home_menu_controller, player_ranking
 from utils import verify_response
 
 
@@ -20,20 +20,21 @@ class LaunchTournament:
         self.quitter = False
 
     def __call__(self):
+        self.wait_response("lancer le tour. ")
         while not self.quitter:
             if len(self.tournament.laps) < int(self.tournament.laps_number):
                 if not self.tournament.laps:
-                    self.wait_response("lancer le premier tour.")
                     self.generate_first_lap()
+                    self.wait_response("lancer le tour suivant. ")
                 else:
-                    self.generate_laps(f"lap {self.tournament.laps_name[len(self.tournament.laps)]}")
-                    self.wait_response("lancer le tour suivant.")
+                    self.generate_laps(f"{self.tournament.laps_name[len(self.tournament.laps)]}")
+                    self.wait_response("lancer le tour suivant. ")
             else:
                 self.tournament.results = self.tournament.players_scores
-                self.tournament.save()
                 display_results = self.tournament.display_results()
                 self.laps_view.display_classement(display_results)
-                self.wait_response("une autre touche vous affichera de nouveau les résultats")
+                self.wait_response("modifier le rang des joueurs du tournoi. ")
+                return player_ranking.PlayerRanking(self.tournament.players)
         return home_menu_controller.HomeMenuController()
 
     def generate_first_lap(self):
@@ -59,8 +60,6 @@ class LaunchTournament:
                 if test_score:
                     verification = True
                     each_match.modify_score(score)
-                else:
-                    print(test_score)
         self.laps_view.display_score(lap.matches)
 
     def generate_laps(self, lap_name):
@@ -69,7 +68,7 @@ class LaunchTournament:
         new_lap.matches = []
         self.generate_pairs(new_lap, self.tournament.players_scores)
         self.laps_view.display_matches(new_lap.matches)
-        self.laps_view.display_information("Entrez les scores pour chaque premier joueur du match")
+        self.laps_view.display_information("Entrez les scores pour chaque premier joueur du match.")
         new_lap.add_end_time()
         self.add_score(new_lap)
         self.tournament.add_laps(new_lap)
@@ -132,8 +131,9 @@ class LaunchTournament:
 
     def wait_response(self, question):
         """ Ask user if he wants to quit ou continue. """
-        response = self.laps_view.ask_question(f"Tapez 'q' pour retourner au menu principal "
-                                               f"ou n'importe quelle touche pour {question}")
+        response = self.laps_view.ask_question(f"Tapez 'q' pour retourner au menu principal"
+                                               f"(votre progression dans le tournoi sera sauvegarder). "
+                                               f"Tapez n'importe quelle touche pour {question}")
         if response == "q":
             self.tournament.save()
             self.quitter = True

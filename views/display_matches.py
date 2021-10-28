@@ -30,6 +30,7 @@ class DisplayMatches:
     @staticmethod
     def display_classement(results):
         """ Display the classement of a tournament. """
+        print("\n Le tournoi est terminé.")
         print(f"Voici le classement pour ce tournoi:\n{results}")
 
     @staticmethod

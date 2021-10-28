@@ -23,13 +23,8 @@ Creation of software to manage chess tournament
     $ python3 main.py
 
 ## B- Pour afficher le peluchage du code avec flake8
-### 1- Faire l'étape A au moins jusqu'au 3ème point
+### 1- Faire l'étape A au moins jusqu'au 3ème point inclus
 ### 2- Lancer flake8
-#### - Pour un affichage en console:
-    $ un seul fichier : flake8 path/to/file
-    $ un dossier : flake8 dir/
-    $ tout le dossier P4_chess_tournament : flake8
-#### - Pour un enregistrement en fichier:
-    $ ajouter >> <nom du fichier> à une des lignes précédentes
-    $ exemple : flake8 >> flake8-html.txt
+    $ flake8 --format=html --htmldir=flake-report
+### 3- Ouvrir le dossier flake8-report qui vient de se créer et lancer le "index.html"
 

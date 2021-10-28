@@ -113,10 +113,10 @@ class Tournament:
             self.results = results
         else:
             self.results = []
+        self.date = (start_date, end_date)
 
         self.serialized_start_date = f"{self.start_date}"
         self.serialized_end_date = f"{self.end_date}"
-        self.date = (start_date, end_date)
         self.serialized_laps = []
         self.serialized_players = []
         self.serialized_players_scores = []
@@ -128,7 +128,7 @@ class Tournament:
         nb = 1
         laps_number = self.laps_number
         while laps_number:
-            self.laps_name.append(f"lap {nb}")
+            self.laps_name.append(f"Lap {nb}")
             nb += 1
             laps_number -= 1
 

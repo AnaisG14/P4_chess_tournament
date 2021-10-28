@@ -45,12 +45,10 @@ class Lap:
         else:
             self.datetime_start = datetime.now()
         self.datetime_end = datetime_end
-        self.serialized_datetime_start = str(self.datetime_start)
-        self.serialized_datetime_end = str(self.datetime_end)
 
-    def add_match(self, match):
+    def add_match(self, new_match):
         """ Add a new match in the lap. """
-        self.matches.append(match)
+        self.matches.append(new_match)
 
     def add_end_time(self):
         """ Add the end time of the lap. """
@@ -61,11 +59,13 @@ class Lap:
         for each_match in self.matches:
             serialized_match = each_match.serialize()
             self.serialized_matches.append(serialized_match)
+        serialized_datetime_start = str(self.datetime_start)
+        serialized_datetime_end = str(self.datetime_end)
         serialized_lap = {
             'lap_name': self.lap_name,
             'matches': self.serialized_matches,
-            'datetime_start': self.serialized_datetime_start,
-            'datetime_end': self.serialized_datetime_end,
+            'datetime_start': serialized_datetime_start,
+            'datetime_end': serialized_datetime_end,
         }
         return serialized_lap
 

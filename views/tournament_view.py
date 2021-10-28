@@ -25,6 +25,10 @@ class TournamentView:
               f"Dates: {description_tournament.date}")
 
     @staticmethod
+    def display_information(informations):
+        print(informations)
+
+    @staticmethod
     def display_tournament_in_progress(tournaments_in_progress):
         """ Display all the tournament in progress and ask a choice to the manager. """
         for key, value in tournaments_in_progress.items():
@@ -35,8 +39,11 @@ class TournamentView:
     @staticmethod
     def display_tournament_name(tournaments):
         """ Display a list of all the tournaments."""
-        for tournament in tournaments:
-            print(f"{tournament.tournament_name}, à {tournament.tournament_place}, {tournament.date}")
+        if tournaments:
+            for tournament in tournaments:
+                print(f"{tournament.tournament_name}, à {tournament.tournament_place}, {tournament.date}")
+        else:
+            print("\nIl n'y a aucun tournoi dans la base de données")
 
     @staticmethod
     def display_laps(tournament):

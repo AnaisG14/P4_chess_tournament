@@ -22,12 +22,13 @@ class PlayerView:
         print(text)
 
     @staticmethod
-    def display_informations_player():
-        """ Display informations about a player. """
-        print("Le joueur a été ajouté")
-
-    @staticmethod
     def display_actors(actors):
         """ Display a list of all actors in the database. """
         for actor in actors:
-            print(f"{actor.last_name} {actor.first_name} né(e) le {actor.birthday} (rang: {actor.ranking}.")
+            print(f"{actor.last_name} {actor.first_name} né(e) le {actor.birthday} (rang: {actor.ranking})")
+
+    @staticmethod
+    def display_choice_actors(actors):
+        """ Display a list of all actors in the database. """
+        for key, value in actors.items():
+            print(f"{key}- {value.last_name} {value.first_name}")

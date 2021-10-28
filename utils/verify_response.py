@@ -53,9 +53,15 @@ def verify_response(question, response):
 
 def check_float(number_to_test):
     """ Check if number_to_test is a float. """
+    accept_scores = [0, 0.5, 1]
     try:
         float(number_to_test)
     except ValueError:
-        return "Vous devez entrer un nombre."
+        print("Vous devez entrer un nombre.")
+        return False
     else:
-        return True
+        if float(number_to_test) in accept_scores:
+            return True
+        else:
+            print("Le score doit être 0, 1 ou 0.5 en cas de match nul")
+            return False

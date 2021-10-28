@@ -1,65 +1,90 @@
 @startuml
 Rectangle Models{
-class TournamentModel {
-tournament_name
-tournament_place
-tournament date [tuple de date(debut, fin)]
-rounds_number [default=4]
-rounds_list [list of round_instance]
-players [list of index players]
-time_controller [bullet, blitz or rapid]
-manager_description
+class Tournament {
+{class} manager [instance de TournamentManager]
+tournament_name [str]
+tournament_place [str]
+laps_number [default=4]
+time_controller [str : bullet, blitz or rapid]
+manager_description [str]
+start_date [str]
+end_date [str]
+laps_name [list of laps name]
+laps [list of instance of laps]
+players [list of instance of Players]
+players_scores [list of list[Player, score]]
+results [list of list[Player, score]]
+date [tuple : start_date, end_date]
+serialized_start_date
+serialized_end_date
+serialized_laps
+serialized_players
+serialized_players_scores
+serialized_results
+save_tournament [instance de ManagementDB
+
+create_laps_name()
+display_results()
+add_player(player)
+add_laps(lap)
+serialize()
+save()
+{class} get_one(serialized_tournament)
 }
 
-class RoundModel {
-round_name
-round_players [list of couple]
+class Lap {
+{class} manager [instance de LapManager]
+lap_name [str]
+matches [list of instance Match]
 datetime_start [autocomplétion à la création du round]
 datetime_end [autocomplétion à la fin du round]
-matches [list]
 
-generation_of_couple()
+add_match() [ajoute un match à la list de matches]
+add_end_time() [ajoute la date et l'heure de fin de round]
+serialize()
+{class}get()
 }
 
-class PlayerModel {
-index_auto
-first_name
-last_name
-date_of_birthday
-sexe
+class Player {
+{class} manager [instance de PlayerManager]
+first_name [str]
+last_name [str]
+birthday [str]
+sexe [str]
 ranking [positive number]
 
 add_tournament(name_tournament)
-modify_ranking()
+modify_ranking(new_ranking)
+serialize()
+save()
+{class} get(serialized_player)
+{class} get_all()
 }
 
-class PlayerInRoundModel(player) {
-piece_color [Black or White]
-result_per_match
-score_tournament
-tournanent
+class ManagementDB {
+db [instance TinyDb]
+tournanents_table
+players_table
 
-modify_score_tournament()
+get(table)
+save(table, to_save)
+clear_tournament()
+modifiy_player_ranking(last_name, firs_name, birthday)
 }
 
-class MatchModel {
-match [tuple of list :player,score]
-add_score() [V=1, D=0, N=1/2]
+class Match {
+{class} manager [instance de MatchManager]
+opponents [tuple of list :player,score]
+winner [str gagnat du match
+modify_score() [V=1, D=0, N=1/2]
+serialize()
+{class}get()
 }
 
-class ClassementModel {
-order_player()
-}
-
-class RapportModel {
-players [list de tous les joueurs]
-players_tournament [list de tous les joueurs d'un tournoi]
-all_tournaments [list de tous les tournois]
-round_tournament [list de tous les rounds d'un tournoi]
-matches_tournament [list de tous les matches d'un tournoi]
-
-alphabetical_order()
-score_order()
+class HomeMenu {
+menu_entries [dict]
+auto_key [int]
+add_item() [-> ajoute des choix au menu]
 }
 }
 

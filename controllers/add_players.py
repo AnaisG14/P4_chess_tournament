@@ -37,10 +37,13 @@ class AddPlayers:
         self.view_get_information_player.add_questions("Sexe du joueur (M/F):\n", "sexe", ['M', 'F'])
         self.view_get_information_player.add_questions("Rang du joueur:\n", "ranking", int)
 
+        number_player_save = 1
         while self.number_player_to_add:
             # ask question to manager
-            self.view_get_information_player.display_informations(f"Entrez les informations du joueur "
-                                                                  f"{self.number_player_to_add}")
+            self.view_get_information_player.display_informations(
+                f"Entrez les informations du joueur"
+                f"{self.number_player_to_add - (self.number_player_to_add - number_player_save)}")
+            number_player_save += 1
             self.add_player_index()
             for question in self.view_get_information_player.questions:
                 self.verification = False
@@ -56,7 +59,7 @@ class AddPlayers:
                 self.tournament.add_players(new_player)
 
             self.number_player_to_add -= 1
-            self.view_get_information_player.display_informations_player()
+            self.view_get_information_player.display_informations("Le joueur a été ajouté.")
         if self.tournament:
             self.view_get_information_player.display_informations("Tous les joueurs ont été ajoutés.")
             return launch_tournament.LaunchTournament(self.tournament)
