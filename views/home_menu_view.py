@@ -37,3 +37,7 @@ class TournamentList:
         for key, value in tournament_entries.items():
             print(f"{key}- {value.tournament_name}")
         return input("Entrez le numéro du tournoi choisi")
+
+    @staticmethod
+    def display_informations(informations):
+        print(informations)

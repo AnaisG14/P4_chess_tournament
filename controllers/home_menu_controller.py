@@ -1,6 +1,7 @@
 from models import home_menu
 from views import home_menu_view
-from controllers import create_tournament, add_players, report_actors, report_tournaments, management_tournament
+from controllers import create_tournament, add_players, report_actors, report_tournaments, management_tournament, \
+    player_ranking
 
 
 class HomeMenuController:
@@ -29,6 +30,7 @@ class SubMenuPlayer(HomeMenuController):
     def __call__(self):
         self.sub_menu_player.add_item("auto", "Ajouter des joueurs", add_players.AddPlayers())
         self.sub_menu_player.add_item("auto", "Afficher la liste des joueurs", report_actors.ReportActors())
+        self.sub_menu_player.add_item("auto", "Modifier le rang d'un joueur", player_ranking.PlayerRanking())
         self.sub_menu_player.add_item("auto", "Retour au menu principal", HomeMenuController())
         return self.sub_menu_view.user_choice()
 
