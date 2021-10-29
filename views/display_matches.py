@@ -1,8 +1,8 @@
 class DisplayMatches:
     """ Display all the matches of a lap"""
 
-    def __init__(self):
-        pass
+    def __init__(self, tournament_in_progress):
+        self.results = tournament_in_progress.results
 
     @staticmethod
     def display_players(players):
@@ -27,11 +27,10 @@ class DisplayMatches:
             print(f"Match {nb}: {match}")
             nb += 1
 
-    @staticmethod
-    def display_classement(results):
+    def display_classement(self):
         """ Display the classement of a tournament. """
         print("\n Le tournoi est terminé.")
-        print(f"Voici le classement pour ce tournoi:\n{results}")
+        print(f"Voici le classement pour ce tournoi:\n{self.results}")
 
     @staticmethod
     def ask_question(question):

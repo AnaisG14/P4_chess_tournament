@@ -46,6 +46,8 @@ class SubMenuTournament(HomeMenuController):
     def __call__(self):
         self.sub_menu_tournament.add_item("auto", "Afficher la liste des tournois",
                                           report_tournaments.ReportTournament())
+        self.sub_menu_tournament.add_item("auto", "Afficher la liste des joueurs d'un tournoi",
+                                          report_tournaments.ReportTournament("players"))
         self.sub_menu_tournament.add_item("auto", "Afficher la liste des tours d'un tournoi",
                                           report_tournaments.ReportTournament("laps"))
         self.sub_menu_tournament.add_item("auto", "Afficher la liste des matches d'un tournoi",

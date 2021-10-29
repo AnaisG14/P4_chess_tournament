@@ -8,9 +8,9 @@ class CreateTournament:
     """ Ask questions to the manager. Use these informations to create a tournament. """
 
     def __init__(self):
-        self.tournament_view = tournament_view.TournamentView()
-        self.attribut_tournament = {}
         self.new_tournament = None
+        self.tournament_view = tournament_view.TournamentView(self.new_tournament)
+        self.attribut_tournament = {}
 
     def __call__(self):
         """ Add questions to the model and ask questions to the user"""
@@ -49,14 +49,15 @@ class CreateTournament:
                     self.verification = True
                     self.attribut_tournament[question[1]] = response
                 else:
-                    print(test_response)
+                    self.tournament_view.display_information(test_response)
         self.new_tournament = tournament.Tournament(**self.attribut_tournament)
-        self.tournament_view.display_responses(self.new_tournament)
+        self.tournament_view = tournament_view.TournamentView(self.new_tournament)
+        self.tournament_view.display_responses()
         response = ""
         autorized_response = ["o", "n", "O", "N"]
         while response not in autorized_response:
             response = self.tournament_view.ask_questions("Répondez par o ou n.\n"
-                                                          "Souhaitez-vous ajouter vos joueurs maintenant ? (o/n)")
+                                                          "Souhaitez-vous ajouter vos joueurs maintenant ? (o/n) ")
         if response == "o" or response == "O":
             return add_players.AddPlayers(self.new_tournament)
         else:

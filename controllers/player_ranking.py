@@ -41,7 +41,7 @@ class PlayerRanking:
                 try:
                     int(index_player)
                 except ValueError:
-                    print("Vous devez entrer un nombre")
+                    self.player_view.display_informations("Vous devez entrer un nombre")
                 else:
                     if int(index_player) in keys:
                         choosed_player = all_players[int(index_player)]
@@ -55,20 +55,19 @@ class PlayerRanking:
                                 test_choice = True
                                 self.player_view.display_informations("Rang modifié avec succès.")
                     else:
-                        print("Vous devez entrer un nombre positif")
+                        self.player_view.display_informations("Vous devez entrer un nombre positif")
         return home_menu_controller.HomeMenuController()
 
-    @staticmethod
-    def test_ranking(ranking):
+    def test_ranking(self, ranking):
         """ Test if ranking is type int and a positive number. """
         try:
             int(ranking)
         except ValueError:
-            print("Vous devez entrer un nombre")
+            self.player_view.display_informations("Vous devez entrer un nombre")
             return False
         else:
             if int(ranking) < 0:
-                print("Vous devez entrer un nombre positif.")
+                self.player_view.display_informations("Vous devez entrer un nombre positif.")
                 return False
             else:
                 return True

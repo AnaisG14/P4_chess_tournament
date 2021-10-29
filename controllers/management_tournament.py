@@ -29,7 +29,7 @@ class ManagementTournament:
                 try:
                     response = int(response)
                 except ValueError:
-                    print("Vous devez entrer un nombre")
+                    self.menu_tournament_view.display_informations("Vous devez entrer un nombre")
                 else:
                     return tournament_entries[response]
         else:
@@ -53,7 +53,7 @@ class ManagementTournament:
                     try:
                         response = int(response)
                     except ValueError:
-                        print("Vous devez entrer un nombre")
+                        self.menu_tournament_view.display_informations("Vous devez entrer un nombre")
                     else:
                         tournament_get = tournament_in_progress.pop(response)
                         self.all_tournaments = [value for value in tournament_in_progress.values()]

@@ -8,7 +8,7 @@ class HomeMenuView:
 
     def display_menu(self):
         """ Display the menu """
-        print("Que voulez-vous faire ?")
+        print("\nQue voulez-vous faire ?")
         for key, value in self.menu_view.menu_entries.items():
             print(f"{str(key)}- {value[0]}")
 
@@ -17,7 +17,7 @@ class HomeMenuView:
             self.keys.append(key)
         self.display_menu()
         while self.choice not in self.keys:
-            self.choice = input("Que voulez-vous faire ? Entrez le numero correspondant")
+            self.choice = input("\nQue voulez-vous faire ? Entrez le numero correspondant: ")
         return self.menu_view.menu_entries[self.choice][1]
 
 
@@ -29,14 +29,14 @@ class TournamentList:
         """ The user can select a tournament. """
         for key, value in tournament_entries.items():
             print(f"{key}- {value.tournament_name}")
-        return input("Entrez le numéro du tournoi choisi")
+        return input("Entrez le numéro du tournoi choisi: ")
 
     @staticmethod
     def choice_tournament_in_progress(tournament_entries):
         """ The user can select a tournament in progress. """
         for key, value in tournament_entries.items():
             print(f"{key}- {value.tournament_name}")
-        return input("Entrez le numéro du tournoi choisi")
+        return input("Entrez le numéro du tournoi choisi: ")
 
     @staticmethod
     def display_informations(informations):

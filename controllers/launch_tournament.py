@@ -15,7 +15,7 @@ class LaunchTournament:
     def __init__(self, tournament_instance):
         self.tournament_view = tournament_view.TournamentView()
         self.tournament = tournament_instance
-        self.laps_view = display_matches.DisplayMatches()
+        self.laps_view = display_matches.DisplayMatches(self.tournament)
         self.manage_tournament = management_tournament.ManagementTournament()
         self.quitter = False
 
@@ -31,8 +31,8 @@ class LaunchTournament:
                     self.wait_response("lancer le tour suivant. ")
             else:
                 self.tournament.results = self.tournament.players_scores
-                display_results = self.tournament.display_results()
-                self.laps_view.display_classement(display_results)
+                self.laps_view.results = self.tournament.players_scores
+                self.laps_view.display_classement()
                 self.wait_response("modifier le rang des joueurs du tournoi. ")
                 return player_ranking.PlayerRanking(self.tournament.players)
         return home_menu_controller.HomeMenuController()

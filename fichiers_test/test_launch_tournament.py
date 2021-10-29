@@ -1,5 +1,6 @@
-from models import tournament, player
 from controllers import launch_tournament
+from models import tournament, player
+
 
 information_tournament1 = {"tournament_name": "Tournois test",
                           "tournament_place": "Sens",
