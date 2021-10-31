@@ -34,6 +34,7 @@ class LaunchTournament:
                 self.laps_view.results = self.tournament.players_scores
                 self.laps_view.display_classement()
                 self.wait_response("modifier le rang des joueurs du tournoi. ")
+                self.tournament.save()
                 return player_ranking.PlayerRanking(self.tournament.players)
         return home_menu_controller.HomeMenuController()
 

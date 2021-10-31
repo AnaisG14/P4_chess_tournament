@@ -30,6 +30,7 @@ class DisplayMatches:
     def display_classement(self):
         """ Display the classement of a tournament. """
         print("\n Le tournoi est terminé.")
+        self.results.sort(key=lambda x: x[1], reverse=True)
         print(f"Voici le classement pour ce tournoi:\n{self.results}")
 
     @staticmethod

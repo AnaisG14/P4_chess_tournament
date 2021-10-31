@@ -121,7 +121,6 @@ class Tournament:
         self.serialized_players = []
         self.serialized_players_scores = []
         self.serialized_results = []
-        self.save_tournament = connexion_db.ManagementDB()
 
     def create_laps_name(self):
         """ Create all the laps of the tournament in function of the number of laps. """
@@ -134,6 +133,7 @@ class Tournament:
 
     def display_results(self):
         """ Sort the results of the tournament. """
+        print("le tournoi est terminé")
         self.results.sort(key=lambda x: x[1], reverse=True)
         return self.results
 

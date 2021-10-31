@@ -48,8 +48,6 @@ class CreateTournament:
                 if test_response:
                     self.verification = True
                     self.attribut_tournament[question[1]] = response
-                else:
-                    self.tournament_view.display_information(test_response)
         self.new_tournament = tournament.Tournament(**self.attribut_tournament)
         self.tournament_view = tournament_view.TournamentView(self.new_tournament)
         self.tournament_view.display_responses()

@@ -56,7 +56,6 @@ class Player:
         self.sexe = sexe
         self.ranking = int(ranking)
         self.tournaments_participation = []
-        self.save_player = connexion_db.ManagementDB()
 
     def modify_ranking(self, new_ranking):
         """ Modify the ranking of a player. """
