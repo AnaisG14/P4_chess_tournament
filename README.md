@@ -20,7 +20,7 @@ Creation of software to manage chess tournament
     $ pip install -r requirements.txt
 
 ### 4- Lancer le script :
-    $ python3 main.py
+    $ python3 -m tournchess
 
 ## B- Pour afficher le peluchage du code avec flake8
 ### 1- Faire l'étape A au moins jusqu'au 3ème point inclus
